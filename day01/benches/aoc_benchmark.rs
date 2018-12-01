@@ -7,18 +7,18 @@ use criterion::Criterion;
 
 use day01::{
     aoc_day01_part1, aoc_day01_part2,
-    benchmark::{BENCHMARKING_INPUT_PART_1, BENCHMARKING_INPUT_PART_2},
+    benchmark::{benchmarking_input_part_1, benchmarking_input_part_2},
 };
 
 fn criterion_benchmark_part1(c: &mut Criterion) {
     c.bench_function("day01_part1", |b| {
-        b.iter(|| aoc_day01_part1(BENCHMARKING_INPUT_PART_2))
+        b.iter(|| aoc_day01_part1(benchmarking_input_part_1()))
     });
 }
 
 fn criterion_benchmark_part2(c: &mut Criterion) {
     c.bench_function("day01_part2", |b| {
-        b.iter(|| aoc_day01_part2(BENCHMARKING_INPUT_PART_1))
+        b.iter(|| aoc_day01_part2(benchmarking_input_part_2()))
     });
 }
 
