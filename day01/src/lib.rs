@@ -132,7 +132,7 @@ where
     frequency
 }
 
-const PUZZLE_INPUT: &'static str = include_str!("../input");
+static PUZZLE_INPUT: &str = include_str!("../input");
 
 pub mod benchmark {
     use crate::{parse_input, PUZZLE_INPUT};
