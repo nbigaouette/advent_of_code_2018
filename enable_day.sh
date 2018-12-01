@@ -28,7 +28,7 @@ cmd="sed -i.bak 's|   \# \"day${day}\",|   \"day${day}\",|g' Cargo.toml"
 echo "--> ${cmd}"
 eval ${cmd}
 
-cmd="sed -i.bak 's|dayXX|day${day}|g' day${day}/src/lib.rs day${day}/Cargo.toml"
+cmd="sed -i.bak 's|dayXX|day${day}|g' day${day}/src/lib.rs day${day}/benches/aoc_benchmark.rs day${day}/Cargo.toml"
 echo "--> ${cmd}"
 eval ${cmd}
 
