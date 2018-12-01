@@ -9,5 +9,5 @@ authors = ["Nicolas Bigaouette <nbigaouette@gmail.com>"]
 criterion = "0.2"
 
 [[bench]]
-name = "dayXX"
+name = "aoc_benchmark"
 harness = false
