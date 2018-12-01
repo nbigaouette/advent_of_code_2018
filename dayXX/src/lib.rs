@@ -24,7 +24,7 @@ pub fn aoc_dayXX(input: &str) -> Solution {
 }
 
 pub mod benchmark {
-    pub const benchmarking_input: &str = "";
+    pub const BENCHMARKING_INPUT: &str = "";
 }
 
 #[cfg(test)]
