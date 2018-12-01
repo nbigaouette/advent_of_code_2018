@@ -51,54 +51,86 @@
 //!
 //! ## Part Two
 //!
+//! You notice that the device repeats the same frequency change list over and over.
+//! To calibrate the device, you need to find the first frequency it reaches _twice_.
 //!
+//! For example, using the same list of changes above, the device would loop as follows:
+//!
+//! * Current frequency ` 0`, change of `+1`; resulting frequency ` 1`.
+//! * Current frequency ` 1`, change of `-2`; resulting frequency `-1`.
+//! * Current frequency `-1`, change of `+3`; resulting frequency ` 2`.
+//! * Current frequency ` 2`, change of `+1`; resulting frequency ` 3`.
+//! * (At this point, the device continues from the start of the list.)
+//! * Current frequency ` 3`, change of `+1`; resulting frequency ` 4`.
+//! * Current frequency ` 4`, change of `-2`; resulting frequency ` 2`, which has
+//! already been seen.
+//!
+//! In this example, the first frequency reached twice is `2`. Note that your device
+//! might need to repeat its list of frequency changes many times before a duplicate
+//! frequency is found, and that duplicates might be found while in the middle of
+//! processing the list.
+//!
+//! Here are other examples:
+//!
+//! * `+1, -1` first reaches `0` twice.
+//! * `+3, +3, +4, -2, -4` first reaches `10` twice.
+//! * `-6, +3, +8, +5, -6` first reaches `5` twice.
+//! * `+7, +7, -2, -7, -4` first reaches `14` twice.
+//!
+//! _What is the first frequency your device reaches twice?_
 
-type SolutionPart1 = i64;
-type SolutionPart2 = i64;
+use std::collections::HashMap;
 
-pub struct Solution {
-    pub part1: SolutionPart1,
-    pub part2: SolutionPart2,
-}
-
-pub fn parse_part1(input: &'static str) -> impl Iterator<Item = SolutionPart1> {
+pub fn parse_input(input: &'static str) -> impl Iterator<Item = i64> {
     input
         .split(|c| c == ',' || c == '\n')
-        .filter_map(|p| match p.trim().parse::<SolutionPart1>() {
+        .filter_map(|p| match p.trim().parse::<i64>() {
             Ok(i) => Some(i),
             Err(e) => {
-                println!("Can't parse {:?}: {:?}", p, e);
+                println!("ERROR: Can't parse {:?}: {:?}", p, e);
                 None
             }
         })
 }
 
-pub fn aoc_day01_part1(input: &'static str) -> SolutionPart1 {
-    parse_part1(input).sum()
+pub fn aoc_day01_part1(input: &'static str) -> i64 {
+    parse_input(input).sum()
 }
 
-pub fn aoc_day01(input: &'static str) -> Solution {
-    Solution {
-        part1: aoc_day01_part1(input),
-        part2: 0,
-    }
+pub fn aoc_day01_part2(input: &'static str) -> i64 {
+    let mut seen_frequencies = HashMap::new();
+    let mut frequency = 0;
+
+    // Insert initial point
+    seen_frequencies.insert(frequency, 1);
+
+    while parse_input(input).find(|i| {
+        frequency += i;
+        let freq_count = seen_frequencies.entry(frequency).or_insert(0);
+        *freq_count += 1;
+        *freq_count == 2
+    }) == None
+    {}
+
+    frequency
 }
 
 pub mod benchmark {
-    pub const BENCHMARKING_INPUT: &str = "";
+    pub const BENCHMARKING_INPUT_PART_1: &str = "";
+    pub const BENCHMARKING_INPUT_PART_2: &str = "";
 }
 
 #[cfg(test)]
 mod tests {
     mod aoc2018 {
         mod day01 {
-            use crate::parse_part1;
+            use crate::parse_input;
 
             const PUZZLE_INPUT: &'static str = include_str!("../input");
 
             #[test]
             fn parse() {
-                let parsed: Vec<_> = parse_part1("+1, -2, +3, +1").collect();
+                let parsed: Vec<_> = parse_input("+1, -2, +3, +1").collect();
                 assert_eq!(parsed, vec![1, -2, 3, 1]);
             }
 
@@ -111,10 +143,7 @@ mod tests {
                     #[test]
                     fn solution() {
                         let expected = 408;
-                        let Solution {
-                            part1: to_check,
-                            part2: _,
-                        } = aoc_day01(PUZZLE_INPUT);
+                        let to_check = aoc_day01_part1(PUZZLE_INPUT);
 
                         assert_eq!(expected, to_check);
                     }
@@ -127,10 +156,7 @@ mod tests {
                     fn ex01() {
                         let expected = 3;
                         let input = "+1, -2, +3, +1";
-                        let Solution {
-                            part1: to_check,
-                            part2: _,
-                        } = aoc_day01(input);
+                        let to_check = aoc_day01_part1(input);
 
                         assert_eq!(expected, to_check);
                     }
@@ -139,10 +165,7 @@ mod tests {
                     fn ex02() {
                         let expected = 3;
                         let input = "+1, +1, +1";
-                        let Solution {
-                            part1: to_check,
-                            part2: _,
-                        } = aoc_day01(input);
+                        let to_check = aoc_day01_part1(input);
 
                         assert_eq!(expected, to_check);
                     }
@@ -151,10 +174,7 @@ mod tests {
                     fn ex03() {
                         let expected = 0;
                         let input = "+1, +1, -2";
-                        let Solution {
-                            part1: to_check,
-                            part2: _,
-                        } = aoc_day01(input);
+                        let to_check = aoc_day01_part1(input);
 
                         assert_eq!(expected, to_check);
                     }
@@ -163,10 +183,7 @@ mod tests {
                     fn ex04() {
                         let expected = -6;
                         let input = "-1, -2, -3";
-                        let Solution {
-                            part1: to_check,
-                            part2: _,
-                        } = aoc_day01(input);
+                        let to_check = aoc_day01_part1(input);
 
                         assert_eq!(expected, to_check);
                     }
@@ -182,37 +199,56 @@ mod tests {
             mod part2 {
 
                 mod solution {
-                    // use super::super::PUZZLE_INPUT;
-                    // use *;
+                    use super::super::PUZZLE_INPUT;
+                    use *;
 
-                    // #[test]
-                    // fn solution() {
-                    //     unimplemented!();
-                    //     // let expected = ;
-                    //     let Solution {
-                    //         part1: to_check,
-                    //         part2: _,
-                    //     } = aoc_day01(PUZZLE_INPUT);
+                    #[test]
+                    fn solution() {
+                        let expected = 55250;
+                        let to_check = aoc_day01_part2(PUZZLE_INPUT);
 
-                    //     assert_eq!(expected, to_check);
-                    // }
+                        assert_eq!(expected, to_check);
+                    }
                 }
 
                 mod given {
-                    // use *;
+                    use *;
 
-                    // #[test]
-                    // fn ex01() {
-                    //     unimplemented!();
-                    //     // let expected = ;
-                    //     let input = "";
-                    //     let Solution {
-                    //         part1: to_check,
-                    //         part2: _,
-                    //     } = aoc_day01(input);
+                    #[test]
+                    fn ex01() {
+                        let expected = 0;
+                        let input = "+1, -1";
+                        let to_check = aoc_day01_part2(input);
 
-                    //     assert_eq!(expected, to_check);
-                    // }
+                        assert_eq!(expected, to_check);
+                    }
+
+                    #[test]
+                    fn ex02() {
+                        let expected = 10;
+                        let input = "+3, +3, +4, -2, -4";
+                        let to_check = aoc_day01_part2(input);
+
+                        assert_eq!(expected, to_check);
+                    }
+
+                    #[test]
+                    fn ex03() {
+                        let expected = 5;
+                        let input = "-6, +3, +8, +5, -6";
+                        let to_check = aoc_day01_part2(input);
+
+                        assert_eq!(expected, to_check);
+                    }
+
+                    #[test]
+                    fn ex04() {
+                        let expected = 14;
+                        let input = "+7, +7, -2, -7, -4";
+                        let to_check = aoc_day01_part2(input);
+
+                        assert_eq!(expected, to_check);
+                    }
                 }
 
                 /*
