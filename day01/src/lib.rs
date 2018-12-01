@@ -87,7 +87,7 @@ pub fn parse_input(input: &'static str) -> impl Iterator<Item = i64> {
         .filter_map(|p| match p.trim().parse::<i64>() {
             Ok(i) => Some(i),
             Err(e) => {
-                println!("ERROR: Can't parse {:?}: {:?}", p, e);
+                // println!("ERROR: Can't parse {:?}: {:?}", p, e);
                 None
             }
         })
@@ -115,9 +115,11 @@ pub fn aoc_day01_part2(input: &'static str) -> i64 {
     frequency
 }
 
+const PUZZLE_INPUT: &'static str = include_str!("../input");
+
 pub mod benchmark {
-    pub const BENCHMARKING_INPUT_PART_1: &str = "";
-    pub const BENCHMARKING_INPUT_PART_2: &str = "";
+    pub const BENCHMARKING_INPUT_PART_1: &str = crate::PUZZLE_INPUT;
+    pub const BENCHMARKING_INPUT_PART_2: &str = crate::PUZZLE_INPUT;
 }
 
 #[cfg(test)]
@@ -125,8 +127,6 @@ mod tests {
     mod aoc2018 {
         mod day01 {
             use crate::parse_input;
-
-            const PUZZLE_INPUT: &'static str = include_str!("../input");
 
             #[test]
             fn parse() {
@@ -137,7 +137,7 @@ mod tests {
             mod part1 {
 
                 mod solution {
-                    use super::super::PUZZLE_INPUT;
+                    use crate::PUZZLE_INPUT;
                     use *;
 
                     #[test]
@@ -199,7 +199,7 @@ mod tests {
             mod part2 {
 
                 mod solution {
-                    use super::super::PUZZLE_INPUT;
+                    use crate::PUZZLE_INPUT;
                     use *;
 
                     #[test]
