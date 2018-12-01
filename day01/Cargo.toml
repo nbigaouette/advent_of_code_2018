@@ -1,0 +1,13 @@
+[package]
+name = "day01"
+version = "0.1.0"
+authors = ["Nicolas Bigaouette <nbigaouette@gmail.com>"]
+
+[dependencies]
+
+[dev-dependencies]
+criterion = "0.2"
+
+[[bench]]
+name = "aoc_benchmark"
+harness = false
