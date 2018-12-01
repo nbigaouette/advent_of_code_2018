@@ -7,12 +7,20 @@ in Rust (1.30).
 
 Install [rustup](https://rustup.rs/).
 
-## Run
+## Run / Unit Tests
 
 Run the unit tests:
 
 ```
 cargo test
+```
+
+## Benchmarks
+
+The benchmarks use [Criterion.rs](https://github.com/japaric/criterion.rs/).
+
+```
+cargo bench
 ```
 
 ## Licensing
