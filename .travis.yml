@@ -10,7 +10,10 @@ before_deploy:
   - pwd
   - ls
   - find
-  - for day in day*; do cp -r ${day}/target/criterion/* public/; done
+  # Copy benchmark information
+  - for day in day*; do cp -r ${day}/target/criterion/* public/${day}; done
+  # Adapt links from docs to benchmark information
+  - for day in day*; do sed "s|../../../day01/target/criterion/||g" -i public/${day}/index.html; done
   - echo "<meta http-equiv=refresh content=0;url=day01/index.html>" > public/index.html
 
 deploy:
