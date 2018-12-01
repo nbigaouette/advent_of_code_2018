@@ -90,57 +90,80 @@ extern crate log;
 
 use std::collections::HashMap;
 
-pub fn parse_input(input: &'static str) -> impl Iterator<Item = i64> {
-    input
-        .split(|c| c == ',' || c == '\n')
-        .filter_map(|p| match p.trim().parse::<i64>() {
-            Ok(i) => Some(i),
-            Err(e) => {
-                warn!("Can't parse {:?}: {:?}", p, e);
-                None
+pub trait AoC<'a> {
+    type Solution;
+    type Data;
+
+    fn new(input: &'a str) -> Self;
+    fn parsed(&self) -> Self::Data;
+    fn solution_part1(&self) -> Self::Solution {
+        unimplemented!()
+    }
+    fn solution_part2(&self) -> Self::Solution {
+        unimplemented!()
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct Day01<'a> {
+    input: &'a str,
+}
+
+impl<'a> AoC<'a> for Day01<'a> {
+    type Solution = i64;
+    type Data = Box<Iterator<Item = Self::Solution> + 'a>;
+
+    fn new(input: &'a str) -> Day01 {
+        Day01 { input }
+    }
+
+    fn parsed(&self) -> Self::Data {
+        Box::new(self.input.split(|c| c == ',' || c == '\n').filter_map(|p| {
+            match p.trim().parse::<Self::Solution>() {
+                Ok(i) => Some(i),
+                Err(e) => {
+                    warn!("Can't parse {:?}: {:?}", p, e);
+                    None
+                }
             }
-        })
-}
+        }))
+    }
 
-pub fn aoc_day01_part1<I>(inputs: I) -> i64
-where
-    I: Iterator<Item = i64>,
-{
-    inputs.sum()
-}
+    fn solution_part1(&self) -> Self::Solution {
+        self.parsed().sum()
+    }
 
-pub fn aoc_day01_part2<I>(inputs: I) -> i64
-where
-    I: Iterator<Item = i64>,
-{
-    let mut seen_frequencies = HashMap::new();
-    let mut frequency = 0;
+    fn solution_part2(&self) -> Self::Solution {
+        let mut seen_frequencies = HashMap::new();
+        let mut frequency = 0;
 
-    // Insert initial point
-    seen_frequencies.insert(frequency, 1);
+        // Insert initial point
+        seen_frequencies.insert(frequency, 1);
 
-    let inputs: Vec<_> = inputs.collect();
+        let inputs: Vec<_> = self.parsed().collect();
 
-    while inputs.iter().cycle().find(|&&i| {
-        frequency += i;
-        let freq_count = seen_frequencies.entry(frequency).or_insert(0);
-        *freq_count += 1;
-        *freq_count == 2
-    }) == None
-    {}
+        while inputs.iter().cycle().find(|&&i| {
+            frequency += i;
+            let freq_count = seen_frequencies.entry(frequency).or_insert(0);
+            *freq_count += 1;
+            *freq_count == 2
+        }) == None
+        {}
 
-    frequency
+        frequency
+    }
 }
 
 static PUZZLE_INPUT: &str = include_str!("../input");
 
 pub mod benchmark {
-    use crate::{parse_input, PUZZLE_INPUT};
-    pub fn benchmarking_input_part_1() -> impl Iterator<Item = i64> {
-        parse_input(PUZZLE_INPUT)
+    use crate::{Day01, PUZZLE_INPUT};
+    pub type DayStruct<'a> = Day01<'a>;
+    pub fn benchmarking_input_part_1<'a>() -> &'a str {
+        PUZZLE_INPUT
     }
-    pub fn benchmarking_input_part_2() -> impl Iterator<Item = i64> {
-        parse_input(PUZZLE_INPUT)
+    pub fn benchmarking_input_part_2<'a>() -> &'a str {
+        PUZZLE_INPUT
     }
 }
 
@@ -157,18 +180,17 @@ mod tests {
                 println!("Setting to: {}", rust_log);
                 env::set_var("RUST_LOG", &rust_log);
                 Ok(rust_log)
-            })
-            .unwrap();
+            }).unwrap();
         let _ = env_logger::try_init();
     }
 
     mod aoc2018 {
         mod day01 {
-            use crate::parse_input;
+            use crate::{AoC, Day01};
 
             #[test]
             fn parse() {
-                let parsed: Vec<_> = parse_input("+1, -2, +3, +1").collect();
+                let parsed: Vec<_> = Day01::new("+1, -2, +3, +1").parsed().collect();
                 assert_eq!(parsed, vec![1, -2, 3, 1]);
             }
 
@@ -176,15 +198,14 @@ mod tests {
 
                 mod solution {
                     use crate::tests::init_logger;
-                    use crate::PUZZLE_INPUT;
-                    use crate::{aoc_day01_part1, parse_input};
+                    use crate::{AoC, Day01, PUZZLE_INPUT};
 
                     #[test]
                     fn solution() {
                         init_logger();
 
                         let expected = 408;
-                        let to_check = aoc_day01_part1(parse_input(PUZZLE_INPUT));
+                        let to_check = Day01::new(PUZZLE_INPUT).solution_part1();
 
                         assert_eq!(expected, to_check);
                     }
@@ -192,7 +213,7 @@ mod tests {
 
                 mod given {
                     use crate::tests::init_logger;
-                    use crate::{aoc_day01_part1, parse_input};
+                    use crate::{AoC, Day01};
 
                     #[test]
                     fn ex01() {
@@ -200,7 +221,7 @@ mod tests {
 
                         let expected = 3;
                         let input = "+1, -2, +3, +1";
-                        let to_check = aoc_day01_part1(parse_input(input));
+                        let to_check = Day01::new(input).solution_part1();
 
                         assert_eq!(expected, to_check);
                     }
@@ -211,7 +232,7 @@ mod tests {
 
                         let expected = 3;
                         let input = "+1, +1, +1";
-                        let to_check = aoc_day01_part1(parse_input(input));
+                        let to_check = Day01::new(input).solution_part1();
 
                         assert_eq!(expected, to_check);
                     }
@@ -222,7 +243,7 @@ mod tests {
 
                         let expected = 0;
                         let input = "+1, +1, -2";
-                        let to_check = aoc_day01_part1(parse_input(input));
+                        let to_check = Day01::new(input).solution_part1();
 
                         assert_eq!(expected, to_check);
                     }
@@ -233,7 +254,7 @@ mod tests {
 
                         let expected = -6;
                         let input = "-1, -2, -3";
-                        let to_check = aoc_day01_part1(parse_input(input));
+                        let to_check = Day01::new(input).solution_part1();
 
                         assert_eq!(expected, to_check);
                     }
@@ -250,15 +271,14 @@ mod tests {
 
                 mod solution {
                     use crate::tests::init_logger;
-                    use crate::PUZZLE_INPUT;
-                    use crate::{aoc_day01_part2, parse_input};
+                    use crate::{AoC, Day01, PUZZLE_INPUT};
 
                     #[test]
                     fn solution() {
                         init_logger();
 
                         let expected = 55250;
-                        let to_check = aoc_day01_part2(parse_input(PUZZLE_INPUT));
+                        let to_check = Day01::new(PUZZLE_INPUT).solution_part2();
 
                         assert_eq!(expected, to_check);
                     }
@@ -266,7 +286,7 @@ mod tests {
 
                 mod given {
                     use crate::tests::init_logger;
-                    use crate::{aoc_day01_part2, parse_input};
+                    use crate::{AoC, Day01};
 
                     #[test]
                     fn ex01() {
@@ -274,7 +294,7 @@ mod tests {
 
                         let expected = 0;
                         let input = "+1, -1";
-                        let to_check = aoc_day01_part2(parse_input(input));
+                        let to_check = Day01::new(input).solution_part2();
 
                         assert_eq!(expected, to_check);
                     }
@@ -285,7 +305,7 @@ mod tests {
 
                         let expected = 10;
                         let input = "+3, +3, +4, -2, -4";
-                        let to_check = aoc_day01_part2(parse_input(input));
+                        let to_check = Day01::new(input).solution_part2();
 
                         assert_eq!(expected, to_check);
                     }
@@ -296,7 +316,7 @@ mod tests {
 
                         let expected = 5;
                         let input = "-6, +3, +8, +5, -6";
-                        let to_check = aoc_day01_part2(parse_input(input));
+                        let to_check = Day01::new(input).solution_part2();
 
                         assert_eq!(expected, to_check);
                     }
@@ -307,7 +327,7 @@ mod tests {
 
                         let expected = 14;
                         let input = "+7, +7, -2, -7, -4";
-                        let to_check = aoc_day01_part2(parse_input(input));
+                        let to_check = Day01::new(input).solution_part2();
 
                         assert_eq!(expected, to_check);
                     }
