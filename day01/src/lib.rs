@@ -52,20 +52,36 @@
 //! ## Part Two
 //!
 //!
-//!
+
+type SolutionPart1 = i64;
+type SolutionPart2 = i64;
 
 pub struct Solution {
-    pub part1: isize,
-    pub part2: isize,
+    pub part1: SolutionPart1,
+    pub part2: SolutionPart2,
 }
 
-pub fn aoc_day01(input: &str) -> Solution {
-    unimplemented!()
+pub fn parse_part1(input: &'static str) -> impl Iterator<Item = SolutionPart1> {
+    input
+        .split(|c| c == ',' || c == '\n')
+        .filter_map(|p| match p.trim().parse::<SolutionPart1>() {
+            Ok(i) => Some(i),
+            Err(e) => {
+                println!("Can't parse {:?}: {:?}", p, e);
+                None
+            }
+        })
+}
 
-    // Solution {
-    //     part1: ,
-    //     part2: ,
-    // }
+pub fn aoc_day01_part1(input: &'static str) -> SolutionPart1 {
+    parse_part1(input).sum()
+}
+
+pub fn aoc_day01(input: &'static str) -> Solution {
+    Solution {
+        part1: aoc_day01_part1(input),
+        part2: 0,
+    }
 }
 
 pub mod benchmark {
@@ -76,7 +92,15 @@ pub mod benchmark {
 mod tests {
     mod aoc2018 {
         mod day01 {
+            use crate::parse_part1;
+
             const PUZZLE_INPUT: &'static str = include_str!("../input");
+
+            #[test]
+            fn parse() {
+                let parsed: Vec<_> = parse_part1("+1, -2, +3, +1").collect();
+                assert_eq!(parsed, vec![1, -2, 3, 1]);
+            }
 
             mod part1 {
 
@@ -86,8 +110,7 @@ mod tests {
 
                     #[test]
                     fn solution() {
-                        unimplemented!();
-                        let expected = 0;
+                        let expected = 408;
                         let Solution {
                             part1: to_check,
                             part2: _,
@@ -159,8 +182,8 @@ mod tests {
             mod part2 {
 
                 mod solution {
-                    use super::super::PUZZLE_INPUT;
-                    use *;
+                    // use super::super::PUZZLE_INPUT;
+                    // use *;
 
                     // #[test]
                     // fn solution() {
@@ -176,7 +199,7 @@ mod tests {
                 }
 
                 mod given {
-                    use *;
+                    // use *;
 
                     // #[test]
                     // fn ex01() {
