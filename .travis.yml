@@ -9,6 +9,7 @@ before_deploy:
   - cp -r target/doc/* public/
   - pwd
   - ls
+  - find
   - for day in day*; do cp -r ${day}/target/criterion/* public/; done
   - echo "<meta http-equiv=refresh content=0;url=day01/index.html>" > public/index.html
 
