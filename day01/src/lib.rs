@@ -1,5 +1,11 @@
 //! # Day 01: Chronal Calibration
 //!
+//! [Benchmarking report](../../../day01/target/criterion/report/index.html):
+//!
+//! * [Part 1](../../../day01/target/criterion/day01_part1/report/index.html)
+//! * [Part 2](../../../day01/target/criterion/day01_part2/report/index.html)
+//!
+//!
 //! ## Part One
 //!
 //! "We've detected some temporal anomalies," one of Santa's Elves at the Temporal
