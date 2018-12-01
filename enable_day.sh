@@ -20,7 +20,7 @@ cmd="git checkout -b day${day}"
 echo "--> ${cmd}"
 eval ${cmd}
 
-cmd="cp -r dayXX day${day}"
+cmd="cp -r template day${day}"
 echo "--> ${cmd}"
 eval ${cmd}
 
