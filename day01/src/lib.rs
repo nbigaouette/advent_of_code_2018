@@ -55,8 +55,8 @@
 //!
 
 pub struct Solution {
-    pub part1: usize,
-    pub part2: usize,
+    pub part1: isize,
+    pub part2: isize,
 }
 
 pub fn aoc_day01(input: &str) -> Solution {
@@ -87,7 +87,7 @@ mod tests {
                     #[test]
                     fn solution() {
                         unimplemented!();
-                        // let expected = ;
+                        let expected = 0;
                         let Solution {
                             part1: to_check,
                             part2: _,
@@ -102,9 +102,44 @@ mod tests {
 
                     #[test]
                     fn ex01() {
-                        unimplemented!();
-                        // let expected = ;
-                        let input = "";
+                        let expected = 3;
+                        let input = "+1, -2, +3, +1";
+                        let Solution {
+                            part1: to_check,
+                            part2: _,
+                        } = aoc_day01(input);
+
+                        assert_eq!(expected, to_check);
+                    }
+
+                    #[test]
+                    fn ex02() {
+                        let expected = 3;
+                        let input = "+1, +1, +1";
+                        let Solution {
+                            part1: to_check,
+                            part2: _,
+                        } = aoc_day01(input);
+
+                        assert_eq!(expected, to_check);
+                    }
+
+                    #[test]
+                    fn ex03() {
+                        let expected = 0;
+                        let input = "+1, +1, -2";
+                        let Solution {
+                            part1: to_check,
+                            part2: _,
+                        } = aoc_day01(input);
+
+                        assert_eq!(expected, to_check);
+                    }
+
+                    #[test]
+                    fn ex04() {
+                        let expected = -6;
+                        let input = "-1, -2, -3";
                         let Solution {
                             part1: to_check,
                             part2: _,
@@ -127,34 +162,34 @@ mod tests {
                     use super::super::PUZZLE_INPUT;
                     use *;
 
-                    #[test]
-                    fn solution() {
-                        unimplemented!();
-                        // let expected = ;
-                        let Solution {
-                            part1: to_check,
-                            part2: _,
-                        } = aoc_day01(PUZZLE_INPUT);
+                    // #[test]
+                    // fn solution() {
+                    //     unimplemented!();
+                    //     // let expected = ;
+                    //     let Solution {
+                    //         part1: to_check,
+                    //         part2: _,
+                    //     } = aoc_day01(PUZZLE_INPUT);
 
-                        assert_eq!(expected, to_check);
-                    }
+                    //     assert_eq!(expected, to_check);
+                    // }
                 }
 
                 mod given {
                     use *;
 
-                    #[test]
-                    fn ex01() {
-                        unimplemented!();
-                        // let expected = ;
-                        let input = "";
-                        let Solution {
-                            part1: to_check,
-                            part2: _,
-                        } = aoc_day01(input);
+                    // #[test]
+                    // fn ex01() {
+                    //     unimplemented!();
+                    //     // let expected = ;
+                    //     let input = "";
+                    //     let Solution {
+                    //         part1: to_check,
+                    //         part2: _,
+                    //     } = aoc_day01(input);
 
-                        assert_eq!(expected, to_check);
-                    }
+                    //     assert_eq!(expected, to_check);
+                    // }
                 }
 
                 /*
