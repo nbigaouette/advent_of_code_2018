@@ -1,5 +1,11 @@
 //! # Day XX:
 //!
+//! [Benchmarking report](../../../dayXX/target/criterion/report/index.html):
+//!
+//! * [Part 1](../../../dayXX/target/criterion/dayXX_part1/report/index.html)
+//! * [Part 2](../../../dayXX/target/criterion/dayXX_part2/report/index.html)
+//!
+//!
 //! ## Part One
 //!
 //!
