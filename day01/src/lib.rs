@@ -79,6 +79,9 @@
 //!
 //! _What is the first frequency your device reaches twice?_
 
+#[macro_use]
+extern crate log;
+
 use std::collections::HashMap;
 
 pub fn parse_input(input: &'static str) -> impl Iterator<Item = i64> {
@@ -87,7 +90,7 @@ pub fn parse_input(input: &'static str) -> impl Iterator<Item = i64> {
         .filter_map(|p| match p.trim().parse::<i64>() {
             Ok(i) => Some(i),
             Err(e) => {
-                // println!("ERROR: Can't parse {:?}: {:?}", p, e);
+                warn!("Can't parse {:?}: {:?}", p, e);
                 None
             }
         })
@@ -137,6 +140,22 @@ pub mod benchmark {
 
 #[cfg(test)]
 mod tests {
+    extern crate env_logger;
+    use std::env;
+
+    fn init_logger() {
+        env::var("RUST_LOG")
+            .or_else(|_| -> Result<String, ()> {
+                let rust_log = "debug".to_string();
+                println!("Environment variable 'RUST_LOG' not set.");
+                println!("Setting to: {}", rust_log);
+                env::set_var("RUST_LOG", &rust_log);
+                Ok(rust_log)
+            })
+            .unwrap();
+        let _ = env_logger::try_init();
+    }
+
     mod aoc2018 {
         mod day01 {
             use crate::parse_input;
@@ -150,11 +169,14 @@ mod tests {
             mod part1 {
 
                 mod solution {
+                    use crate::tests::init_logger;
                     use crate::PUZZLE_INPUT;
-                    use *;
+                    use crate::{aoc_day01_part1, parse_input};
 
                     #[test]
                     fn solution() {
+                        init_logger();
+
                         let expected = 408;
                         let to_check = aoc_day01_part1(parse_input(PUZZLE_INPUT));
 
@@ -163,10 +185,13 @@ mod tests {
                 }
 
                 mod given {
-                    use *;
+                    use crate::tests::init_logger;
+                    use crate::{aoc_day01_part1, parse_input};
 
                     #[test]
                     fn ex01() {
+                        init_logger();
+
                         let expected = 3;
                         let input = "+1, -2, +3, +1";
                         let to_check = aoc_day01_part1(parse_input(input));
@@ -176,6 +201,8 @@ mod tests {
 
                     #[test]
                     fn ex02() {
+                        init_logger();
+
                         let expected = 3;
                         let input = "+1, +1, +1";
                         let to_check = aoc_day01_part1(parse_input(input));
@@ -185,6 +212,8 @@ mod tests {
 
                     #[test]
                     fn ex03() {
+                        init_logger();
+
                         let expected = 0;
                         let input = "+1, +1, -2";
                         let to_check = aoc_day01_part1(parse_input(input));
@@ -194,6 +223,8 @@ mod tests {
 
                     #[test]
                     fn ex04() {
+                        init_logger();
+
                         let expected = -6;
                         let input = "-1, -2, -3";
                         let to_check = aoc_day01_part1(parse_input(input));
@@ -212,11 +243,14 @@ mod tests {
             mod part2 {
 
                 mod solution {
+                    use crate::tests::init_logger;
                     use crate::PUZZLE_INPUT;
-                    use *;
+                    use crate::{aoc_day01_part2, parse_input};
 
                     #[test]
                     fn solution() {
+                        init_logger();
+
                         let expected = 55250;
                         let to_check = aoc_day01_part2(parse_input(PUZZLE_INPUT));
 
@@ -225,10 +259,13 @@ mod tests {
                 }
 
                 mod given {
-                    use *;
+                    use crate::tests::init_logger;
+                    use crate::{aoc_day01_part2, parse_input};
 
                     #[test]
                     fn ex01() {
+                        init_logger();
+
                         let expected = 0;
                         let input = "+1, -1";
                         let to_check = aoc_day01_part2(parse_input(input));
@@ -238,6 +275,8 @@ mod tests {
 
                     #[test]
                     fn ex02() {
+                        init_logger();
+
                         let expected = 10;
                         let input = "+3, +3, +4, -2, -4";
                         let to_check = aoc_day01_part2(parse_input(input));
@@ -247,6 +286,8 @@ mod tests {
 
                     #[test]
                     fn ex03() {
+                        init_logger();
+
                         let expected = 5;
                         let input = "-6, +3, +8, +5, -6";
                         let to_check = aoc_day01_part2(parse_input(input));
@@ -256,6 +297,8 @@ mod tests {
 
                     #[test]
                     fn ex04() {
+                        init_logger();
+
                         let expected = 14;
                         let input = "+7, +7, -2, -7, -4";
                         let to_check = aoc_day01_part2(parse_input(input));

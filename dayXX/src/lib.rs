@@ -9,6 +9,9 @@
 //!
 //!
 
+#[macro_use]
+extern crate log;
+
 pub struct Solution {
     pub part1: usize,
     pub part2: usize,
@@ -29,6 +32,22 @@ pub mod benchmark {
 
 #[cfg(test)]
 mod tests {
+    extern crate env_logger;
+    use std::env;
+
+    fn init_logger() {
+        env::var("RUST_LOG")
+            .or_else(|_| -> Result<String, ()> {
+                let rust_log = "debug".to_string();
+                println!("Environment variable 'RUST_LOG' not set.");
+                println!("Setting to: {}", rust_log);
+                env::set_var("RUST_LOG", &rust_log);
+                Ok(rust_log)
+            })
+            .unwrap();
+        let _ = env_logger::try_init();
+    }
+
     mod aoc2018 {
         mod dayXX {
             const PUZZLE_INPUT: &'static str = include_str!("../input");
