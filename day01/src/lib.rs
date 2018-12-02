@@ -114,6 +114,18 @@ pub trait AoC<'a>: Debug {
     }
 }
 
+fn parse_input<'a>(input: &'a str) -> impl Iterator<Item = i64> + 'a {
+    input.split(|c| c == ',' || c == '\n').filter_map(|p| {
+        match p.trim().parse::<i64>() {
+            Ok(i) => Some(i),
+            Err(e) => {
+                // warn!("Can't parse {:?}: {:?}", p, e);
+                None
+            }
+        }
+    })
+}
+
 type Day01Solution = i64;
 type Day01Data<'a> = Box<Iterator<Item = Day01Solution> + 'a>;
 
@@ -135,15 +147,7 @@ impl<'a> AoC<'a> for Day01BuildIter<'a> {
     }
 
     fn parsed(&self) -> Self::Data {
-        Box::new(self.input.split(|c| c == ',' || c == '\n').filter_map(|p| {
-            match p.trim().parse::<Self::Solution>() {
-                Ok(i) => Some(i),
-                Err(e) => {
-                    // warn!("Can't parse {:?}: {:?}", p, e);
-                    None
-                }
-            }
-        }))
+        Box::new(parse_input(self.input))
     }
 
     fn solution_part1(&self) -> Self::Solution {
