@@ -96,6 +96,9 @@ pub use dynparse::Day01BuildIter;
 mod preparse_hashmap;
 pub use preparse_hashmap::Day01PreParseHashMap;
 
+mod preparse_hashset;
+pub use preparse_hashset::Day01PreParseHashSet;
+
 pub trait AoC<'a>: Debug {
     type Solution;
     type Data;
