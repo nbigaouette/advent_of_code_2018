@@ -89,32 +89,49 @@
 extern crate log;
 
 use std::collections::HashMap;
+use std::fmt::Debug;
 
-pub trait AoC<'a> {
+pub trait AoC<'a>: Debug {
     type Solution;
     type Data;
 
-    fn new(input: &'a str) -> Self;
+    fn description(&self) -> &'static str {
+        "None"
+    }
+
+    fn new(input: &'a str) -> Self
+    where
+        Self: Sized;
+
     fn parsed(&self) -> Self::Data;
+
     fn solution_part1(&self) -> Self::Solution {
         unimplemented!()
     }
+
     fn solution_part2(&self) -> Self::Solution {
         unimplemented!()
     }
 }
 
-#[derive(Debug, Clone)]
-pub struct Day01<'a> {
+type Day01Solution = i64;
+type Day01Data<'a> = Box<Iterator<Item = Day01Solution> + 'a>;
+
+#[derive(Debug)]
+pub struct Day01BuildIter<'a> {
     input: &'a str,
 }
 
-impl<'a> AoC<'a> for Day01<'a> {
-    type Solution = i64;
-    type Data = Box<Iterator<Item = Self::Solution> + 'a>;
+impl<'a> AoC<'a> for Day01BuildIter<'a> {
+    type Solution = Day01Solution;
+    type Data = Day01Data<'a>;
 
-    fn new(input: &'a str) -> Day01 {
-        Day01 { input }
+    fn description(&self) -> &'static str {
+        "Parse string dynamically"
+    }
+
+    fn new(input: &'a str) -> Day01BuildIter {
+        Day01BuildIter { input }
     }
 
     fn parsed(&self) -> Self::Data {
@@ -157,13 +174,14 @@ impl<'a> AoC<'a> for Day01<'a> {
 static PUZZLE_INPUT: &str = include_str!("../input");
 
 pub mod benchmark {
-    use crate::{Day01, PUZZLE_INPUT};
-    pub type DayStruct<'a> = Day01<'a>;
-    pub fn benchmarking_input_part_1<'a>() -> &'a str {
-        PUZZLE_INPUT
-    }
-    pub fn benchmarking_input_part_2<'a>() -> &'a str {
-        PUZZLE_INPUT
+    use super::*;
+
+    pub type ToBenchmark<'a> = Day01BuildIter<'a>;
+    pub type BenchmarkVector<'a> =
+        Vec<Box<dyn AoC<'a, Solution = Day01Solution, Data = Day01Data<'a>> + 'a>>;
+
+    pub fn to_benchmark<'a>() -> BenchmarkVector<'a> {
+        vec![Box::new(Day01BuildIter::new(PUZZLE_INPUT))]
     }
 }
 
@@ -186,11 +204,11 @@ mod tests {
 
     mod aoc2018 {
         mod day01 {
-            use crate::{AoC, Day01};
+            use crate::{AoC, Day01BuildIter};
 
             #[test]
             fn parse() {
-                let parsed: Vec<_> = Day01::new("+1, -2, +3, +1").parsed().collect();
+                let parsed: Vec<_> = Day01BuildIter::new("+1, -2, +3, +1").parsed().collect();
                 assert_eq!(parsed, vec![1, -2, 3, 1]);
             }
 
@@ -198,14 +216,14 @@ mod tests {
 
                 mod solution {
                     use crate::tests::init_logger;
-                    use crate::{AoC, Day01, PUZZLE_INPUT};
+                    use crate::{AoC, Day01BuildIter, PUZZLE_INPUT};
 
                     #[test]
                     fn solution() {
                         init_logger();
 
                         let expected = 408;
-                        let to_check = Day01::new(PUZZLE_INPUT).solution_part1();
+                        let to_check = Day01BuildIter::new(PUZZLE_INPUT).solution_part1();
 
                         assert_eq!(expected, to_check);
                     }
@@ -213,7 +231,7 @@ mod tests {
 
                 mod given {
                     use crate::tests::init_logger;
-                    use crate::{AoC, Day01};
+                    use crate::{AoC, Day01BuildIter};
 
                     #[test]
                     fn ex01() {
@@ -221,7 +239,7 @@ mod tests {
 
                         let expected = 3;
                         let input = "+1, -2, +3, +1";
-                        let to_check = Day01::new(input).solution_part1();
+                        let to_check = Day01BuildIter::new(input).solution_part1();
 
                         assert_eq!(expected, to_check);
                     }
@@ -232,7 +250,7 @@ mod tests {
 
                         let expected = 3;
                         let input = "+1, +1, +1";
-                        let to_check = Day01::new(input).solution_part1();
+                        let to_check = Day01BuildIter::new(input).solution_part1();
 
                         assert_eq!(expected, to_check);
                     }
@@ -243,7 +261,7 @@ mod tests {
 
                         let expected = 0;
                         let input = "+1, +1, -2";
-                        let to_check = Day01::new(input).solution_part1();
+                        let to_check = Day01BuildIter::new(input).solution_part1();
 
                         assert_eq!(expected, to_check);
                     }
@@ -254,7 +272,7 @@ mod tests {
 
                         let expected = -6;
                         let input = "-1, -2, -3";
-                        let to_check = Day01::new(input).solution_part1();
+                        let to_check = Day01BuildIter::new(input).solution_part1();
 
                         assert_eq!(expected, to_check);
                     }
@@ -271,14 +289,14 @@ mod tests {
 
                 mod solution {
                     use crate::tests::init_logger;
-                    use crate::{AoC, Day01, PUZZLE_INPUT};
+                    use crate::{AoC, Day01BuildIter, PUZZLE_INPUT};
 
                     #[test]
                     fn solution() {
                         init_logger();
 
                         let expected = 55250;
-                        let to_check = Day01::new(PUZZLE_INPUT).solution_part2();
+                        let to_check = Day01BuildIter::new(PUZZLE_INPUT).solution_part2();
 
                         assert_eq!(expected, to_check);
                     }
@@ -286,7 +304,7 @@ mod tests {
 
                 mod given {
                     use crate::tests::init_logger;
-                    use crate::{AoC, Day01};
+                    use crate::{AoC, Day01BuildIter};
 
                     #[test]
                     fn ex01() {
@@ -294,7 +312,7 @@ mod tests {
 
                         let expected = 0;
                         let input = "+1, -1";
-                        let to_check = Day01::new(input).solution_part2();
+                        let to_check = Day01BuildIter::new(input).solution_part2();
 
                         assert_eq!(expected, to_check);
                     }
@@ -305,7 +323,7 @@ mod tests {
 
                         let expected = 10;
                         let input = "+3, +3, +4, -2, -4";
-                        let to_check = Day01::new(input).solution_part2();
+                        let to_check = Day01BuildIter::new(input).solution_part2();
 
                         assert_eq!(expected, to_check);
                     }
@@ -316,7 +334,7 @@ mod tests {
 
                         let expected = 5;
                         let input = "-6, +3, +8, +5, -6";
-                        let to_check = Day01::new(input).solution_part2();
+                        let to_check = Day01BuildIter::new(input).solution_part2();
 
                         assert_eq!(expected, to_check);
                     }
@@ -327,7 +345,7 @@ mod tests {
 
                         let expected = 14;
                         let input = "+7, +7, -2, -7, -4";
-                        let to_check = Day01::new(input).solution_part2();
+                        let to_check = Day01BuildIter::new(input).solution_part2();
 
                         assert_eq!(expected, to_check);
                     }

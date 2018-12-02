@@ -4,32 +4,32 @@ extern crate criterion;
 extern crate day01;
 
 use criterion::Criterion;
+use criterion::{Bencher, Fun};
 
-use day01::{
-    benchmark::{benchmarking_input_part_1, benchmarking_input_part_2, DayStruct},
-    AoC,
-};
+use day01::benchmark::to_benchmark;
 
 fn criterion_benchmark_part1(c: &mut Criterion) {
-    let v = vec![DayStruct::new(benchmarking_input_part_1())];
-    c.bench_function_over_inputs(
-        "day01_part1",
-        |b, day| {
-            b.iter(|| day.solution_part1());
-        },
-        v,
-    );
+    let functions: Vec<_> = to_benchmark()
+        .into_iter()
+        .map(|s| {
+            Fun::new(s.description(), move |b: &mut Bencher, _: &()| {
+                b.iter(|| s.solution_part1())
+            })
+        }).collect();
+
+    c.bench_functions("day01_part1", functions, ());
 }
 
 fn criterion_benchmark_part2(c: &mut Criterion) {
-    let v = vec![DayStruct::new(benchmarking_input_part_2())];
-    c.bench_function_over_inputs(
-        "day01_part2",
-        |b, day| {
-            b.iter(|| day.solution_part2());
-        },
-        v,
-    );
+    let functions: Vec<_> = to_benchmark()
+        .into_iter()
+        .map(|s| {
+            Fun::new(s.description(), move |b: &mut Bencher, _: &()| {
+                b.iter(|| s.solution_part2())
+            })
+        }).collect();
+
+    c.bench_functions("day01_part2", functions, ());
 }
 
 criterion_group!(
