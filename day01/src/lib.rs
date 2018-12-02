@@ -122,7 +122,7 @@ impl<'a> AoC<'a> for Day01<'a> {
             match p.trim().parse::<Self::Solution>() {
                 Ok(i) => Some(i),
                 Err(e) => {
-                    warn!("Can't parse {:?}: {:?}", p, e);
+                    // warn!("Can't parse {:?}: {:?}", p, e);
                     None
                 }
             }
