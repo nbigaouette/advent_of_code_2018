@@ -39,7 +39,9 @@ pub trait AoC<'a>: Debug {
     where
         Self: Sized;
 
-    fn parsed(&self) -> Self::Data;
+    fn parsed(&self) -> Self::Data {
+        unimplemented!()
+    }
 
     fn solution_part1(&self) -> Self::Solution1 {
         unimplemented!()
@@ -94,16 +96,10 @@ impl<'a> AoC<'a> for Day02BuildIter<'a> {
         Day02BuildIter { input }
     }
 
-    fn parsed(&self) -> Self::Data {
-        // Box::new(parse_input(self.input))
-        unimplemented!()
-    }
-
     fn solution_part1(&self) -> Self::Solution1 {
         let mut count_two = 0;
         let mut count_three = 0;
-        self.input.lines().for_each(|line| {
-            let line = line.trim();
+        self.input.lines().map(|line| line.trim()).for_each(|line| {
             let mut seen = HashMap::new();
             let mut line_count_two = 0;
             let mut line_count_three = 0;
