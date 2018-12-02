@@ -26,6 +26,8 @@ use std::fmt::Debug;
 pub mod initial;
 pub use initial::Day02Initial;
 
+pub mod bound_check_elision;
+pub use bound_check_elision::Day02BoundCheckElision;
 
 pub trait AoC<'a>: Debug {
     type Solution1;
@@ -76,6 +78,7 @@ pub mod benchmark {
     pub fn to_benchmark<'a>() -> BenchmarkVector<'a> {
         vec![
             Box::new(Day02Initial::new(PUZZLE_INPUT)),
+            Box::new(Day02BoundCheckElision::new(PUZZLE_INPUT)),
         ]
     }
 }
