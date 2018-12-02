@@ -5,6 +5,8 @@ authors = ["Nicolas Bigaouette <nbigaouette@gmail.com>"]
 
 [dependencies]
 log = "0.4"
+strsim = "0.8.0"
+itertools = "0.7"
 
 [dev-dependencies]
 criterion = "0.2"
