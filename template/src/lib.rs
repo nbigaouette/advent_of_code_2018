@@ -21,7 +21,8 @@ extern crate log;
 use std::fmt::Debug;
 
 pub trait AoC<'a>: Debug {
-    type Solution;
+    type SolutionPart1;
+    type SolutionPart2;
     type Data;
 
     fn description(&self) -> &'static str {
@@ -34,11 +35,11 @@ pub trait AoC<'a>: Debug {
 
     fn parsed(&self) -> Self::Data;
 
-    fn solution_part1(&self) -> Self::Solution {
+    fn solution_part1(&self) -> Self::SolutionPart1 {
         unimplemented!()
     }
 
-    fn solution_part2(&self) -> Self::Solution {
+    fn solution_part2(&self) -> Self::SolutionPart2 {
         unimplemented!()
     }
 }
@@ -48,8 +49,9 @@ fn parse_input<'a>(input: &'a str) -> impl Iterator<Item = i64> + 'a {
     vec![].into_iter()
 }
 
-type DayXXSolution = i64;
-type DayXXData<'a> = Box<Iterator<Item = DayXXSolution> + 'a>;
+type DayXXSolutionPart1 = i64;
+type DayXXSolutionPart2 = i64;
+type DayXXData<'a> = Box<Iterator<Item = DayXXSolutionPart1> + 'a>;
 
 static PUZZLE_INPUT: &str = include_str!("../input");
 
@@ -58,7 +60,7 @@ pub mod benchmark {
 
     pub type ToBenchmark<'a> = DayXXBuildIter<'a>;
     pub type BenchmarkVector<'a> =
-        Vec<Box<dyn AoC<'a, Solution = DayXXSolution, Data = DayXXData<'a>> + 'a>>;
+        Vec<Box<dyn AoC<'a, Solution = DayXXSolutionPart1, Data = DayXXData<'a>> + 'a>>;
 
     pub fn to_benchmark<'a>() -> BenchmarkVector<'a> {
         unimplemented!()
@@ -74,7 +76,8 @@ pub struct DayXXBuildIter<'a> {
 }
 
 impl<'a> AoC<'a> for DayXXBuildIter<'a> {
-    type Solution = DayXXSolution;
+    type SolutionPart1 = DayXXSolutionPart1;
+    type SolutionPart2 = DayXXSolutionPart2;
     type Data = DayXXData<'a>;
 
     fn description(&self) -> &'static str {
@@ -89,10 +92,10 @@ impl<'a> AoC<'a> for DayXXBuildIter<'a> {
         Box::new(parse_input(self.input))
     }
 
-    // fn solution_part1(&self) -> Self::Solution {
+    // fn solution_part1(&self) -> Self::SolutionPart1 {
     // }
 
-    // fn solution_part2(&self) -> Self::Solution {
+    // fn solution_part2(&self) -> Self::SolutionPart2 {
     // }
 }
 
@@ -124,8 +127,6 @@ mod tests {
 
     mod aoc2018 {
         mod dayXX {
-            const PUZZLE_INPUT: &'static str = include_str!("../input");
-
             mod part1 {
 
                 mod solution {
