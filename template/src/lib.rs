@@ -23,7 +23,7 @@ use std::fmt::Debug;
 pub trait AoC<'a>: Debug {
     type SolutionPart1;
     type SolutionPart2;
-    type Data;
+    type Parsed;
 
     fn description(&self) -> &'static str {
         "None"
@@ -33,7 +33,9 @@ pub trait AoC<'a>: Debug {
     where
         Self: Sized;
 
-    fn parsed(&self) -> Self::Data;
+    fn parsed(&self) -> Self::Parsed {
+        unimplemented!()
+    }
 
     fn solution_part1(&self) -> Self::SolutionPart1 {
         unimplemented!()
@@ -53,12 +55,11 @@ type DayXXSolutionPart1 = i64;
 type DayXXSolutionPart2 = i64;
 type DayXXData<'a> = Box<Iterator<Item = DayXXSolutionPart1> + 'a>;
 
-static PUZZLE_INPUT: &str = include_str!("../input");
+pub static PUZZLE_INPUT: &str = include_str!("../input");
 
 pub mod benchmark {
     use super::*;
 
-    pub type ToBenchmark<'a> = DayXXBuildIter<'a>;
     pub type BenchmarkVector<'a> =
         Vec<Box<dyn AoC<'a, Solution = DayXXSolutionPart1, Data = DayXXData<'a>> + 'a>>;
 
@@ -70,35 +71,6 @@ pub mod benchmark {
     }
 }
 
-#[derive(Debug)]
-pub struct DayXXBuildIter<'a> {
-    input: &'a str,
-}
-
-impl<'a> AoC<'a> for DayXXBuildIter<'a> {
-    type SolutionPart1 = DayXXSolutionPart1;
-    type SolutionPart2 = DayXXSolutionPart2;
-    type Data = DayXXData<'a>;
-
-    fn description(&self) -> &'static str {
-        "Parse string dynamically"
-    }
-
-    fn new(input: &'a str) -> DayXXBuildIter {
-        DayXXBuildIter { input }
-    }
-
-    fn parsed(&self) -> Self::Data {
-        Box::new(parse_input(self.input))
-    }
-
-    // fn solution_part1(&self) -> Self::SolutionPart1 {
-    // }
-
-    // fn solution_part2(&self) -> Self::SolutionPart2 {
-    // }
-}
-
 #[cfg(test)]
 mod tests {
     extern crate env_logger;
@@ -106,7 +78,7 @@ mod tests {
 
     use crate::parse_input;
 
-    fn init_logger() {
+    pub fn init_logger() {
         env::var("RUST_LOG")
             .or_else(|_| -> Result<String, ()> {
                 let rust_log = "debug".to_string();
@@ -123,97 +95,5 @@ mod tests {
         unimplemented!();
         let parsed: Vec<_> = parse_input("").collect();
         assert_eq!(parsed, vec![]);
-    }
-
-    mod aoc2018 {
-        mod dayXX {
-            mod part1 {
-
-                mod solution {
-                    use crate::tests::init_logger;
-                    use crate::{AoC, DayXXBuildIter, PUZZLE_INPUT};
-
-                    #[test]
-                    fn solution() {
-                        init_logger();
-
-                        unimplemented!();
-
-                        let expected = 0;
-                        let to_check = DayXXBuildIter::new(PUZZLE_INPUT).solution_part1();
-
-                        assert_eq!(expected, to_check);
-                    }
-                }
-
-                mod given {
-                    use crate::tests::init_logger;
-                    use crate::{AoC, DayXXBuildIter};
-
-                    #[test]
-                    fn ex01() {
-                        init_logger();
-
-                        unimplemented!();
-
-                        let expected = 0;
-                        let input = "";
-                        let to_check = DayXXBuildIter::new(input).solution_part1();
-
-                        assert_eq!(expected, to_check);
-                    }
-                }
-
-                /*
-                mod extra {
-                    use ::*;
-                }
-                */
-            }
-
-            mod part2 {
-
-                mod solution {
-                    use crate::tests::init_logger;
-                    use crate::{AoC, DayXXBuildIter, PUZZLE_INPUT};
-
-                    #[test]
-                    fn solution() {
-                        init_logger();
-
-                        unimplemented!();
-
-                        let expected = 0;
-                        let to_check = DayXXBuildIter::new(PUZZLE_INPUT).solution_part2();
-
-                        assert_eq!(expected, to_check);
-                    }
-                }
-
-                mod given {
-                    use crate::tests::init_logger;
-                    use crate::{AoC, DayXXBuildIter};
-
-                    #[test]
-                    fn ex01() {
-                        init_logger();
-
-                        unimplemented!();
-
-                        let expected = 0;
-                        let input = "";
-                        let to_check = DayXXBuildIter::new(input).solution_part2();
-
-                        assert_eq!(expected, to_check);
-                    }
-                }
-
-                /*
-                mod extra {
-                    use ::*;
-                }
-                */
-            }
-        }
     }
 }
