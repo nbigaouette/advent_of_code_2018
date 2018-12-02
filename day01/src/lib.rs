@@ -120,7 +120,7 @@ fn parse_input<'a>(input: &'a str) -> impl Iterator<Item = i64> + 'a {
     input.split(|c| c == ',' || c == '\n').filter_map(|p| {
         match p.trim().parse::<i64>() {
             Ok(i) => Some(i),
-            Err(e) => {
+            Err(_e) => {
                 // warn!("Can't parse {:?}: {:?}", p, e);
                 None
             }
