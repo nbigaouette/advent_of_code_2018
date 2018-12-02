@@ -20,6 +20,8 @@ extern crate log;
 
 use std::fmt::Debug;
 
+use std::collections::HashMap;
+
 pub trait AoC<'a>: Debug {
     type Solution;
     type Data;
@@ -41,11 +43,6 @@ pub trait AoC<'a>: Debug {
     fn solution_part2(&self) -> Self::Solution {
         unimplemented!()
     }
-}
-
-fn parse_input<'a>(input: &'a str) -> impl Iterator<Item = i64> + 'a {
-    unimplemented!();
-    vec![].into_iter()
 }
 
 type Day02Solution = i64;
@@ -86,11 +83,52 @@ impl<'a> AoC<'a> for Day02BuildIter<'a> {
     }
 
     fn parsed(&self) -> Self::Data {
-        Box::new(parse_input(self.input))
+        // Box::new(parse_input(self.input))
+        unimplemented!()
     }
 
-    // fn solution_part1(&self) -> Self::Solution {
-    // }
+    fn solution_part1(&self) -> Self::Solution {
+        let mut count_two = 0;
+        let mut count_three = 0;
+        self.input.lines().for_each(|line| {
+            let line = line.trim();
+            println!(
+                "line: {}   count_two: {}   count_three: {}",
+                line, count_two, count_three
+            );
+            let mut seen = HashMap::new();
+            let mut line_count_two = 0;
+            let mut line_count_three = 0;
+            line.chars().for_each(|c| {
+                let n = seen.entry(c).or_insert(0);
+                *n += 1;
+                println!("    c: {}  n: {}", c, n);
+                if *n == 2 {
+                    line_count_two += 1;
+                    println!(
+                        "        --> line_count_two +=1 --> {}  line_count_three: {}",
+                        line_count_two, line_count_three
+                    );
+                } else if *n == 3 {
+                    line_count_two -= 1;
+                    line_count_three += 1;
+                    println!(
+                        "        --> line_count_two -=1 --> {}  line_count_three +=1 --> {}",
+                        line_count_two, line_count_three
+                    );
+                }
+            });
+            count_two += line_count_two.min(1);
+            count_three += line_count_three.min(1);
+
+            println!(
+                "  --> count_two: {}   count_three: {}",
+                count_two, count_three
+            );
+        });
+
+        count_two * count_three
+    }
 
     // fn solution_part2(&self) -> Self::Solution {
     // }
@@ -100,8 +138,6 @@ impl<'a> AoC<'a> for Day02BuildIter<'a> {
 mod tests {
     extern crate env_logger;
     use std::env;
-
-    use crate::parse_input;
 
     fn init_logger() {
         env::var("RUST_LOG")
@@ -113,13 +149,6 @@ mod tests {
                 Ok(rust_log)
             }).unwrap();
         let _ = env_logger::try_init();
-    }
-
-    #[test]
-    fn parse() {
-        unimplemented!();
-        let parsed: Vec<_> = parse_input("").collect();
-        assert_eq!(parsed, vec![]);
     }
 
     mod aoc2018 {
@@ -136,9 +165,7 @@ mod tests {
                     fn solution() {
                         init_logger();
 
-                        unimplemented!();
-
-                        let expected = 0;
+                        let expected = 5000;
                         let to_check = Day02BuildIter::new(PUZZLE_INPUT).solution_part1();
 
                         assert_eq!(expected, to_check);
@@ -153,10 +180,14 @@ mod tests {
                     fn ex01() {
                         init_logger();
 
-                        unimplemented!();
-
-                        let expected = 0;
-                        let input = "";
+                        let expected = 12;
+                        let input = "abcdef
+                                     bababc
+                                     abbcde
+                                     abcccd
+                                     aabcdd
+                                     abcdee
+                                     ababab";
                         let to_check = Day02BuildIter::new(input).solution_part1();
 
                         assert_eq!(expected, to_check);
