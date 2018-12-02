@@ -18,28 +18,90 @@
 #[macro_use]
 extern crate log;
 
-pub struct Solution {
-    pub part1: usize,
-    pub part2: usize,
+use std::fmt::Debug;
+
+pub trait AoC<'a>: Debug {
+    type Solution;
+    type Data;
+
+    fn description(&self) -> &'static str {
+        "None"
+    }
+
+    fn new(input: &'a str) -> Self
+    where
+        Self: Sized;
+
+    fn parsed(&self) -> Self::Data;
+
+    fn solution_part1(&self) -> Self::Solution {
+        unimplemented!()
+    }
+
+    fn solution_part2(&self) -> Self::Solution {
+        unimplemented!()
+    }
 }
 
-pub fn aoc_dayXX(input: &str) -> Solution {
-    unimplemented!()
-
-    // Solution {
-    //     part1: ,
-    //     part2: ,
-    // }
+fn parse_input<'a>(input: &'a str) -> impl Iterator<Item = i64> + 'a {
+    unimplemented!();
+    vec![].into_iter()
 }
+
+type DayXXSolution = i64;
+type DayXXData<'a> = Box<Iterator<Item = DayXXSolution> + 'a>;
+
+static PUZZLE_INPUT: &str = include_str!("../input");
 
 pub mod benchmark {
-    pub const BENCHMARKING_INPUT: &str = "";
+    use super::*;
+
+    pub type ToBenchmark<'a> = DayXXBuildIter<'a>;
+    pub type BenchmarkVector<'a> =
+        Vec<Box<dyn AoC<'a, Solution = DayXXSolution, Data = DayXXData<'a>> + 'a>>;
+
+    pub fn to_benchmark<'a>() -> BenchmarkVector<'a> {
+        unimplemented!()
+        // vec![
+        //     Box::new(DayXXBuildIter::new(PUZZLE_INPUT)),
+        // ]
+    }
+}
+
+#[derive(Debug)]
+pub struct DayXXBuildIter<'a> {
+    input: &'a str,
+}
+
+impl<'a> AoC<'a> for DayXXBuildIter<'a> {
+    type Solution = DayXXSolution;
+    type Data = DayXXData<'a>;
+
+    fn description(&self) -> &'static str {
+        "Parse string dynamically"
+    }
+
+    fn new(input: &'a str) -> DayXXBuildIter {
+        DayXXBuildIter { input }
+    }
+
+    fn parsed(&self) -> Self::Data {
+        Box::new(parse_input(self.input))
+    }
+
+    // fn solution_part1(&self) -> Self::Solution {
+    // }
+
+    // fn solution_part2(&self) -> Self::Solution {
+    // }
 }
 
 #[cfg(test)]
 mod tests {
     extern crate env_logger;
     use std::env;
+
+    use crate::parse_input;
 
     fn init_logger() {
         env::var("RUST_LOG")
@@ -49,9 +111,15 @@ mod tests {
                 println!("Setting to: {}", rust_log);
                 env::set_var("RUST_LOG", &rust_log);
                 Ok(rust_log)
-            })
-            .unwrap();
+            }).unwrap();
         let _ = env_logger::try_init();
+    }
+
+    #[test]
+    fn parse() {
+        unimplemented!();
+        let parsed: Vec<_> = parse_input("").collect();
+        assert_eq!(parsed, vec![]);
     }
 
     mod aoc2018 {
@@ -61,34 +129,35 @@ mod tests {
             mod part1 {
 
                 mod solution {
-                    use super::super::PUZZLE_INPUT;
-                    use *;
+                    use crate::tests::init_logger;
+                    use crate::{AoC, DayXXBuildIter, PUZZLE_INPUT};
 
                     #[test]
                     fn solution() {
+                        init_logger();
+
                         unimplemented!();
-                        // let expected = ;
-                        let Solution {
-                            part1: to_check,
-                            part2: _,
-                        } = aoc_dayXX(PUZZLE_INPUT);
+
+                        let expected = 0;
+                        let to_check = DayXXBuildIter::new(PUZZLE_INPUT).solution_part1();
 
                         assert_eq!(expected, to_check);
                     }
                 }
 
                 mod given {
-                    use *;
+                    use crate::tests::init_logger;
+                    use crate::{AoC, DayXXBuildIter};
 
                     #[test]
                     fn ex01() {
+                        init_logger();
+
                         unimplemented!();
-                        // let expected = ;
+
+                        let expected = 0;
                         let input = "";
-                        let Solution {
-                            part1: to_check,
-                            part2: _,
-                        } = aoc_dayXX(input);
+                        let to_check = DayXXBuildIter::new(input).solution_part1();
 
                         assert_eq!(expected, to_check);
                     }
@@ -104,34 +173,35 @@ mod tests {
             mod part2 {
 
                 mod solution {
-                    use super::super::PUZZLE_INPUT;
-                    use *;
+                    use crate::tests::init_logger;
+                    use crate::{AoC, DayXXBuildIter, PUZZLE_INPUT};
 
                     #[test]
                     fn solution() {
+                        init_logger();
+
                         unimplemented!();
-                        // let expected = ;
-                        let Solution {
-                            part1: to_check,
-                            part2: _,
-                        } = aoc_dayXX(PUZZLE_INPUT);
+
+                        let expected = 0;
+                        let to_check = DayXXBuildIter::new(PUZZLE_INPUT).solution_part2();
 
                         assert_eq!(expected, to_check);
                     }
                 }
 
                 mod given {
-                    use *;
+                    use crate::tests::init_logger;
+                    use crate::{AoC, DayXXBuildIter};
 
                     #[test]
                     fn ex01() {
+                        init_logger();
+
                         unimplemented!();
-                        // let expected = ;
+
+                        let expected = 0;
                         let input = "";
-                        let Solution {
-                            part1: to_check,
-                            part2: _,
-                        } = aoc_dayXX(input);
+                        let to_check = DayXXBuildIter::new(input).solution_part2();
 
                         assert_eq!(expected, to_check);
                     }

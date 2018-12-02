@@ -4,12 +4,39 @@ extern crate criterion;
 extern crate dayXX;
 
 use criterion::Criterion;
+use criterion::{Bencher, Fun};
 
-use dayXX::{aoc_dayXX, benchmark::BENCHMARKING_INPUT};
+use dayXX::benchmark::to_benchmark;
 
-fn criterion_benchmark(c: &mut Criterion) {
-    c.bench_function("dayXX", |b| b.iter(|| aoc_dayXX(BENCHMARKING_INPUT)));
+fn criterion_benchmark_part1(c: &mut Criterion) {
+    let functions: Vec<_> = to_benchmark()
+        .into_iter()
+        .map(|s| {
+            Fun::new(
+                &s.description().replace(" ", "_"),
+                move |b: &mut Bencher, _: &()| b.iter(|| s.solution_part1()),
+            )
+        }).collect();
+
+    c.bench_functions("dayXX_part1", functions, ());
 }
 
-criterion_group!(benches, criterion_benchmark);
+fn criterion_benchmark_part2(c: &mut Criterion) {
+    let functions: Vec<_> = to_benchmark()
+        .into_iter()
+        .map(|s| {
+            Fun::new(
+                &s.description().replace(" ", "_"),
+                move |b: &mut Bencher, _: &()| b.iter(|| s.solution_part2()),
+            )
+        }).collect();
+
+    c.bench_functions("dayXX_part2", functions, ());
+}
+
+criterion_group!(
+    benches,
+    criterion_benchmark_part1,
+    criterion_benchmark_part2
+);
 criterion_main!(benches);

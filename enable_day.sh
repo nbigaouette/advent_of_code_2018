@@ -36,6 +36,10 @@ cmd="sed -i.bak 's|Day XX|Day ${day}|g' day${day}/src/lib.rs"
 echo "--> ${cmd}"
 eval ${cmd}
 
+cmd="sed -i.bak 's|DayXX|Day${day}|g' day${day}/src/lib.rs"
+echo "--> ${cmd}"
+eval ${cmd}
+
 cmd="find . -name '*.bak' -exec rm -f {} \;"
 echo "--> ${cmd}"
 eval ${cmd}
