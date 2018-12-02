@@ -85,8 +85,8 @@
 //!
 //! _What is the first frequency your device reaches twice?_
 
-#[macro_use]
-extern crate log;
+// #[macro_use]
+// extern crate log;
 
 use std::collections::HashMap;
 use std::fmt::Debug;
