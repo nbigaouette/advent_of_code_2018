@@ -1,16 +1,16 @@
 use std::collections::{HashMap, HashSet};
 
-use crate::{parse_input, AoC, Day03Parsed, Day03SolutionPart1, Day03SolutionPart2};
+use crate::{parse_input, AoC, Day03SolutionPart1, Day03SolutionPart2};
+
+#[derive(Debug)]
+pub struct Day03Initial<'a> {
+    input: &'a str,
+}
 
 #[derive(Debug, Hash, Eq, PartialEq)]
 struct Coord {
     i: u64,
     j: u64,
-}
-
-#[derive(Debug)]
-pub struct Day03Initial<'a> {
-    input: &'a str,
 }
 
 fn solution_part1(input: &str) -> (Day03SolutionPart1, HashMap<Coord, Vec<u64>>) {
@@ -34,7 +34,6 @@ fn solution_part1(input: &str) -> (Day03SolutionPart1, HashMap<Coord, Vec<u64>>)
 impl<'a> AoC<'a> for Day03Initial<'a> {
     type SolutionPart1 = Day03SolutionPart1;
     type SolutionPart2 = Day03SolutionPart2;
-    type Parsed = Day03Parsed<'a>;
 
     fn description(&self) -> &'static str {
         "Parse string dynamically"
@@ -43,10 +42,6 @@ impl<'a> AoC<'a> for Day03Initial<'a> {
     fn new(input: &'a str) -> Day03Initial {
         Day03Initial { input }
     }
-
-    // fn parsed(&self) -> Self::Parsed {
-    //     Box::new(parse_input(self.input))
-    // }
 
     fn solution_part1(&self) -> Self::SolutionPart1 {
         let (count, _seen) = solution_part1(self.input);

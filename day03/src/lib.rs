@@ -23,10 +23,12 @@ use std::fmt::Debug;
 pub mod initial;
 pub use initial::Day03Initial;
 
+type Day03SolutionPart1 = u64;
+type Day03SolutionPart2 = u64;
+
 pub trait AoC<'a>: Debug {
     type SolutionPart1;
     type SolutionPart2;
-    type Parsed;
 
     fn description(&self) -> &'static str {
         "None"
@@ -35,10 +37,6 @@ pub trait AoC<'a>: Debug {
     fn new(input: &'a str) -> Self
     where
         Self: Sized;
-
-    fn parsed(&self) -> Self::Parsed {
-        unimplemented!()
-    }
 
     fn solution_part1(&self) -> Self::SolutionPart1 {
         unimplemented!()
@@ -78,10 +76,6 @@ pub fn parse_input<'a>(input: &'a str) -> impl Iterator<Item = Input> + 'a {
     parse_input_str(input).map(|i| Input::from(i))
 }
 
-type Day03SolutionPart1 = u64;
-type Day03SolutionPart2 = u64;
-type Day03Parsed<'a> = Box<Iterator<Item = Day03SolutionPart1> + 'a>;
-
 pub static PUZZLE_INPUT: &str = include_str!("../input");
 
 pub mod benchmark {
@@ -89,17 +83,15 @@ pub mod benchmark {
 
     pub type BenchmarkVector<'a> = Vec<
         Box<
-            dyn AoC<
-                    'a,
-                    SolutionPart1 = Day03SolutionPart1,
-                    SolutionPart2 = Day03SolutionPart2,
-                    Parsed = Day03Parsed<'a>,
-                > + 'a,
+            dyn AoC<'a, SolutionPart1 = Day03SolutionPart1, SolutionPart2 = Day03SolutionPart2>
+                + 'a,
         >,
     >;
 
     pub fn to_benchmark<'a>() -> BenchmarkVector<'a> {
-        vec![Box::new(Day03Initial::new(PUZZLE_INPUT))]
+        vec![
+            Box::new(Day03Initial::new(PUZZLE_INPUT)),
+        ]
     }
 }
 
