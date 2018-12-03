@@ -23,10 +23,12 @@ use std::fmt::Debug;
 pub mod initial;
 pub use initial::DayXXInitial;
 
+type DayXXSolutionPart1 = i64;
+type DayXXSolutionPart2 = i64;
+
 pub trait AoC<'a>: Debug {
     type SolutionPart1;
     type SolutionPart2;
-    type Parsed;
 
     fn description(&self) -> &'static str {
         "None"
@@ -35,10 +37,6 @@ pub trait AoC<'a>: Debug {
     fn new(input: &'a str) -> Self
     where
         Self: Sized;
-
-    fn parsed(&self) -> Self::Parsed {
-        unimplemented!()
-    }
 
     fn solution_part1(&self) -> Self::SolutionPart1 {
         unimplemented!()
@@ -54,10 +52,6 @@ fn parse_input<'a>(input: &'a str) -> impl Iterator<Item = i64> + 'a {
     vec![].into_iter()
 }
 
-type DayXXSolutionPart1 = i64;
-type DayXXSolutionPart2 = i64;
-type DayXXData<'a> = Box<Iterator<Item = DayXXSolutionPart1> + 'a>;
-
 pub static PUZZLE_INPUT: &str = include_str!("../input");
 
 pub mod benchmark {
@@ -65,19 +59,15 @@ pub mod benchmark {
 
     pub type BenchmarkVector<'a> = Vec<
         Box<
-            dyn AoC<
-                    'a,
-                    SolutionPart1 = DayXXSolutionPart1,
-                    SolutionPart2 = DayXXSolutionPart2,
-                    Parsed = DayXXData<'a>,
-                > + 'a,
+            dyn AoC<'a, SolutionPart1 = DayXXSolutionPart1, SolutionPart2 = DayXXSolutionPart2>
+                + 'a,
         >,
     >;
 
     pub fn to_benchmark<'a>() -> BenchmarkVector<'a> {
         unimplemented!()
         // vec![
-        //     Box::new(DayXXBuildIter::new(PUZZLE_INPUT)),
+        //     Box::new(DayXXInitial::new(PUZZLE_INPUT)),
         // ]
     }
 }

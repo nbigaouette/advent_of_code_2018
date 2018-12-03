@@ -1,4 +1,4 @@
-use crate::{parse_input, AoC, DayXXParsed, DayXXSolutionPart1, DayXXSolutionPart2};
+use crate::{parse_input, AoC, DayXXSolutionPart1, DayXXSolutionPart2};
 
 #[derive(Debug)]
 pub struct DayXXInitial<'a> {
@@ -8,7 +8,6 @@ pub struct DayXXInitial<'a> {
 impl<'a> AoC<'a> for DayXXInitial<'a> {
     type SolutionPart1 = DayXXSolutionPart1;
     type SolutionPart2 = DayXXSolutionPart2;
-    type Parsed = DayXXParsed<'a>;
 
     fn description(&self) -> &'static str {
         "Parse string dynamically"
@@ -17,10 +16,6 @@ impl<'a> AoC<'a> for DayXXInitial<'a> {
     fn new(input: &'a str) -> DayXXInitial {
         DayXXInitial { input }
     }
-
-    // fn parsed(&self) -> Self::Parsed {
-    //     Box::new(parse_input(self.input))
-    // }
 
     // fn solution_part1(&self) -> Self::SolutionPart1 {
     // }
