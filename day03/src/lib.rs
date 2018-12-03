@@ -40,16 +40,16 @@ pub trait AoC<'a>: Debug {
         unimplemented!()
     }
 
-    fn solution_part1(&mut self) -> Self::SolutionPart1 {
+    fn solution_part1(&self) -> Self::SolutionPart1 {
         unimplemented!()
     }
 
-    fn solution_part2(&mut self) -> Self::SolutionPart2 {
+    fn solution_part2(&self) -> Self::SolutionPart2 {
         unimplemented!()
     }
 }
 
-pub fn parse_input<'a>(input: &'a str) -> impl Iterator<Item = InputStr<'a>> + 'a {
+pub fn parse_input_str<'a>(input: &'a str) -> impl Iterator<Item = InputStr<'a>> + 'a {
     input.lines().map(move |line| {
         let mut s = line.trim().split(' ');
         // Id
@@ -72,6 +72,10 @@ pub fn parse_input<'a>(input: &'a str) -> impl Iterator<Item = InputStr<'a>> + '
             tall,
         }
     })
+}
+
+pub fn parse_input<'a>(input: &'a str) -> impl Iterator<Item = Input> + 'a {
+    parse_input_str(input).map(|i| Input::from(i))
 }
 
 type Day03SolutionPart1 = u64;
@@ -134,8 +138,7 @@ mod tests {
     extern crate env_logger;
     use std::env;
 
-    use crate::parse_input;
-    use crate::{Input, InputStr};
+    use crate::{parse_input, parse_input_str, Input, InputStr};
 
     pub fn init_logger() {
         env::var("RUST_LOG")
@@ -154,7 +157,7 @@ mod tests {
         init_logger();
 
         let input = "#123 @ 3,2: 5x4";
-        let parsed: Vec<InputStr> = parse_input(input).collect();
+        let parsed: Vec<InputStr> = parse_input_str(input).collect();
         assert_eq!(
             parsed,
             vec![InputStr {
@@ -174,7 +177,7 @@ mod tests {
         let input = "#1 @ 1,3: 4x4
                      #2 @ 3,1: 4x4
                      #3 @ 5,5: 2x2";
-        let parsed: Vec<InputStr> = parse_input(input).collect();
+        let parsed: Vec<InputStr> = parse_input_str(input).collect();
         assert_eq!(
             parsed,
             vec![
@@ -208,7 +211,7 @@ mod tests {
         init_logger();
 
         let input = "#123 @ 3,2: 5x4";
-        let parsed: Vec<Input> = parse_input(input).map(|i| Input::from(i)).collect();
+        let parsed: Vec<Input> = parse_input(input).collect();
         assert_eq!(
             parsed,
             vec![Input {

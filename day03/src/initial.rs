@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 
-use crate::{parse_input, AoC, Day03Parsed, Day03SolutionPart1, Day03SolutionPart2, Input};
+use crate::{parse_input, AoC, Day03Parsed, Day03SolutionPart1, Day03SolutionPart2};
 
 #[derive(Debug, Hash, Eq, PartialEq)]
 struct Coord {
@@ -11,8 +11,24 @@ struct Coord {
 #[derive(Debug)]
 pub struct Day03Initial<'a> {
     input: &'a str,
+}
 
-    seen: HashMap<Coord, Vec<u64>>,
+fn solution_part1(input: &str) -> (Day03SolutionPart1, HashMap<Coord, Vec<u64>>) {
+    let mut count = 0;
+    let mut seen = HashMap::new();
+    for claim in parse_input(input) {
+        for i in claim.left..(claim.left + claim.wide) {
+            for j in claim.top..(claim.top + claim.tall) {
+                let coord = Coord { i, j };
+                let point = seen.entry(coord).or_insert(vec![]);
+                point.push(claim.id);
+                if point.len() == 2 {
+                    count += 1;
+                }
+            }
+        }
+    }
+    (count, seen)
 }
 
 impl<'a> AoC<'a> for Day03Initial<'a> {
@@ -25,45 +41,30 @@ impl<'a> AoC<'a> for Day03Initial<'a> {
     }
 
     fn new(input: &'a str) -> Day03Initial {
-        Day03Initial {
-            input,
-            seen: HashMap::new(),
-        }
+        Day03Initial { input }
     }
 
     // fn parsed(&self) -> Self::Parsed {
     //     Box::new(parse_input(self.input))
     // }
 
-    fn solution_part1(&mut self) -> Self::SolutionPart1 {
-        let mut count = 0;
-        for claim in parse_input(self.input).map(|i| Input::from(i)) {
-            for i in claim.left..(claim.left + claim.wide) {
-                for j in claim.top..(claim.top + claim.tall) {
-                    let coord = Coord { i, j };
-                    let point = self.seen.entry(coord).or_insert(vec![]);
-                    point.push(claim.id);
-                    if point.len() == 2 {
-                        count += 1;
-                    }
-                }
-            }
-        }
+    fn solution_part1(&self) -> Self::SolutionPart1 {
+        let (count, _seen) = solution_part1(self.input);
         count
     }
 
-    fn solution_part2(&mut self) -> Self::SolutionPart2 {
+    fn solution_part2(&self) -> Self::SolutionPart2 {
+        let (_count, seen) = solution_part1(self.input);
+
         // Calculate the hashmap
         let _ = self.solution_part1();
-        let mut claims: HashSet<u64> = parse_input(self.input)
-            .map(|claim_str| claim_str.id.parse().unwrap())
-            .collect();
+        let mut claims: HashSet<u64> = parse_input(self.input).map(|claim| claim.id).collect();
 
-        for claim in parse_input(self.input).map(|i| Input::from(i)) {
+        for claim in parse_input(self.input) {
             for i in claim.left..(claim.left + claim.wide) {
                 for j in claim.top..(claim.top + claim.tall) {
                     let coord = Coord { i, j };
-                    let ids_at_coord = self.seen.get(&coord).unwrap();
+                    let ids_at_coord = seen.get(&coord).unwrap();
                     if ids_at_coord.len() >= 2 {
                         for id_at_coord in ids_at_coord {
                             claims.remove(&id_at_coord);
