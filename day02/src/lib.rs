@@ -58,7 +58,7 @@
 //! The boxes will have IDs which differ by exactly one character at the same position in
 //! both strings. For example, given the following box IDs:
 //!
-//! ```
+//! ```text
 //! abcde
 //! fghij
 //! klmno
