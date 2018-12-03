@@ -74,8 +74,8 @@ pub fn parse_input<'a>(input: &'a str) -> impl Iterator<Item = InputStr<'a>> + '
     })
 }
 
-type Day03SolutionPart1 = i64;
-type Day03SolutionPart2 = i64;
+type Day03SolutionPart1 = u64;
+type Day03SolutionPart2 = u64;
 type Day03Parsed<'a> = Box<Iterator<Item = Day03SolutionPart1> + 'a>;
 
 pub static PUZZLE_INPUT: &str = include_str!("../input");

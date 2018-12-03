@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use crate::{parse_input, AoC, Day03Parsed, Day03SolutionPart1, Day03SolutionPart2, Input};
 
@@ -12,8 +12,7 @@ struct Coord {
 pub struct Day03Initial<'a> {
     input: &'a str,
 
-    seen: HashMap<Coord, u64>,
-    // seen: HashMap<Coord, Vec<u64>>,
+    seen: HashMap<Coord, Vec<u64>>,
 }
 
 impl<'a> AoC<'a> for Day03Initial<'a> {
@@ -42,22 +41,11 @@ impl<'a> AoC<'a> for Day03Initial<'a> {
             for i in claim.left..(claim.left + claim.wide) {
                 for j in claim.top..(claim.top + claim.tall) {
                     let coord = Coord { i, j };
-                    let point = self.seen.entry(coord).or_insert(0);
-                    *point += 1;
-                    if *point == 2 {
+                    let point = self.seen.entry(coord).or_insert(vec![]);
+                    point.push(claim.id);
+                    if point.len() == 2 {
                         count += 1;
-                        // println!(
-                        //     "Coord: {:?}  point: {}  count: {}",
-                        //     Coord { i, j },
-                        //     point,
-                        //     count
-                        // );
                     }
-                    // let point = self.seen.entry(coord).or_insert(vec![]);
-                    // point.push(claim.id);
-                    // if point.len() == 2 {
-                    //     count += 1;
-                    // }
                 }
             }
         }
@@ -66,8 +54,27 @@ impl<'a> AoC<'a> for Day03Initial<'a> {
 
     fn solution_part2(&mut self) -> Self::SolutionPart2 {
         // Calculate the hashmap
-        // let _ = self.solution_part1();
-        unimplemented!()
+        let _ = self.solution_part1();
+        let mut claims: HashSet<u64> = parse_input(self.input)
+            .map(|claim_str| claim_str.id.parse().unwrap())
+            .collect();
+
+        for claim in parse_input(self.input).map(|i| Input::from(i)) {
+            for i in claim.left..(claim.left + claim.wide) {
+                for j in claim.top..(claim.top + claim.tall) {
+                    let coord = Coord { i, j };
+                    let ids_at_coord = self.seen.get(&coord).unwrap();
+                    if ids_at_coord.len() >= 2 {
+                        for id_at_coord in ids_at_coord {
+                            claims.remove(&id_at_coord);
+                        }
+                    }
+                }
+            }
+        }
+        assert_eq!(claims.len(), 1);
+
+        *claims.iter().next().unwrap()
     }
 }
 
@@ -133,7 +140,7 @@ mod tests {
             fn solution() {
                 init_logger();
 
-                let expected = 0;
+                let expected = 415;
                 let to_check = Day03Initial::new(PUZZLE_INPUT).solution_part2();
 
                 assert_eq!(expected, to_check);
