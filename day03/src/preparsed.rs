@@ -84,16 +84,6 @@ mod tests {
             use crate::{tests::init_logger, AoC, PUZZLE_INPUT};
 
             #[test]
-            fn bugged_solution_01() {
-                init_logger();
-
-                let not_expected = 128626;
-                let to_check = Day03Preparsed::new(PUZZLE_INPUT).solution_part1();
-
-                assert_ne!(not_expected, to_check);
-            }
-
-            #[test]
             fn solution() {
                 init_logger();
 
