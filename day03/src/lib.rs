@@ -23,6 +23,9 @@ use std::fmt::Debug;
 pub mod initial;
 pub use initial::Day03Initial;
 
+pub mod preparsed;
+pub use preparsed::Day03Preparsed;
+
 type Day03SolutionPart1 = u64;
 type Day03SolutionPart2 = u64;
 
@@ -91,6 +94,7 @@ pub mod benchmark {
     pub fn to_benchmark<'a>() -> BenchmarkVector<'a> {
         vec![
             Box::new(Day03Initial::new(PUZZLE_INPUT)),
+            Box::new(Day03Preparsed::new(PUZZLE_INPUT)),
         ]
     }
 }
