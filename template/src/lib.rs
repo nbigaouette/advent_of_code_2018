@@ -20,6 +20,9 @@ extern crate log;
 
 use std::fmt::Debug;
 
+pub mod initial;
+pub use initial::DayXXInitial;
+
 pub trait AoC<'a>: Debug {
     type SolutionPart1;
     type SolutionPart2;
@@ -60,8 +63,16 @@ pub static PUZZLE_INPUT: &str = include_str!("../input");
 pub mod benchmark {
     use super::*;
 
-    pub type BenchmarkVector<'a> =
-        Vec<Box<dyn AoC<'a, Solution = DayXXSolutionPart1, Data = DayXXData<'a>> + 'a>>;
+    pub type BenchmarkVector<'a> = Vec<
+        Box<
+            dyn AoC<
+                    'a,
+                    SolutionPart1 = DayXXSolutionPart1,
+                    SolutionPart2 = DayXXSolutionPart2,
+                    Parsed = DayXXData<'a>,
+                > + 'a,
+        >,
+    >;
 
     pub fn to_benchmark<'a>() -> BenchmarkVector<'a> {
         unimplemented!()
