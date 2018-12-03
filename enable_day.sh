@@ -36,7 +36,7 @@ cmd="sed -i.bak 's|Day XX|Day ${day}|g' day${day}/src/lib.rs"
 echo "--> ${cmd}"
 eval ${cmd}
 
-cmd="sed -i.bak 's|DayXX|Day${day}|g' day${day}/src/lib.rs"
+cmd="sed -i.bak 's|DayXX|Day${day}|g' day${day}/src/lib.rs day${day}/src/initial.rs"
 echo "--> ${cmd}"
 eval ${cmd}
 
