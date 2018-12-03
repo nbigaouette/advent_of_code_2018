@@ -9,11 +9,11 @@ pub struct Day03Preparsed {
 
 #[derive(Debug, Hash, Eq, PartialEq)]
 struct Coord {
-    i: u64,
-    j: u64,
+    i: usize,
+    j: usize,
 }
 
-fn solution_part1(input: &Vec<Input>) -> (Day03SolutionPart1, HashMap<Coord, Vec<u64>>) {
+fn solution_part1(input: &Vec<Input>) -> (Day03SolutionPart1, HashMap<Coord, Vec<usize>>) {
     let mut count = 0;
     let mut seen = HashMap::new();
     for claim in input {
@@ -55,7 +55,7 @@ impl<'a> AoC<'a> for Day03Preparsed {
 
         // Calculate the hashmap
         let _ = self.solution_part1();
-        let mut claims: HashSet<u64> = self.input.iter().map(|claim| claim.id).collect();
+        let mut claims: HashSet<usize> = self.input.iter().map(|claim| claim.id).collect();
 
         for claim in &self.input {
             for i in claim.left..(claim.left + claim.wide) {

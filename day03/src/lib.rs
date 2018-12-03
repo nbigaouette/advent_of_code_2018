@@ -97,8 +97,8 @@ pub use initial::Day03Initial;
 pub mod preparsed;
 pub use preparsed::Day03Preparsed;
 
-type Day03SolutionPart1 = u64;
-type Day03SolutionPart2 = u64;
+type Day03SolutionPart1 = usize;
+type Day03SolutionPart2 = usize;
 
 pub trait AoC<'a>: Debug {
     type SolutionPart1;
@@ -181,11 +181,11 @@ pub struct InputStr<'a> {
 
 #[derive(Debug, PartialEq)]
 pub struct Input {
-    id: u64,
-    left: u64,
-    top: u64,
-    wide: u64,
-    tall: u64,
+    id: usize,
+    left: usize,
+    top: usize,
+    wide: usize,
+    tall: usize,
 }
 
 impl<'a> From<InputStr<'a>> for Input {
