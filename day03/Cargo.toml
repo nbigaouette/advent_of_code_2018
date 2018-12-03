@@ -5,6 +5,7 @@ authors = ["Nicolas Bigaouette <nbigaouette@gmail.com>"]
 
 [dependencies]
 log = "0.4"
+ndarray = "0.12"
 
 [dev-dependencies]
 criterion = "0.2"

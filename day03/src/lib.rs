@@ -88,6 +88,7 @@
 
 // #[macro_use]
 // extern crate log;
+extern crate ndarray;
 
 use std::fmt::Debug;
 
@@ -96,6 +97,9 @@ pub use initial::Day03Initial;
 
 pub mod preparsed;
 pub use preparsed::Day03Preparsed;
+
+pub mod preparsed_ndarray;
+pub use preparsed_ndarray::Day03PreparsedNdarray;
 
 type Day03SolutionPart1 = usize;
 type Day03SolutionPart2 = usize;
@@ -166,6 +170,7 @@ pub mod benchmark {
         vec![
             Box::new(Day03Initial::new(PUZZLE_INPUT)),
             Box::new(Day03Preparsed::new(PUZZLE_INPUT)),
+            Box::new(Day03PreparsedNdarray::new(PUZZLE_INPUT)),
         ]
     }
 }
