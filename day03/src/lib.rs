@@ -98,6 +98,9 @@ pub use initial::Day03Initial;
 pub mod preparsed;
 pub use preparsed::Day03Preparsed;
 
+pub mod preparsed_memoization;
+pub use preparsed_memoization::Day03PreparsedMemoization;
+
 pub mod preparsed_ndarray;
 pub use preparsed_ndarray::Day03PreparsedNdarray;
 
@@ -171,6 +174,7 @@ pub mod benchmark {
             Box::new(Day03Initial::new(PUZZLE_INPUT)),
             Box::new(Day03Preparsed::new(PUZZLE_INPUT)),
             Box::new(Day03PreparsedNdarray::new(PUZZLE_INPUT)),
+            Box::new(Day03PreparsedMemoization::new(PUZZLE_INPUT)),
         ]
     }
 }
