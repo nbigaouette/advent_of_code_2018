@@ -76,11 +76,11 @@
 //! is found by removing the differing character from either ID, producing `fgij`.)
 //!
 
-#[macro_use]
-extern crate log;
-extern crate strsim;
-#[macro_use]
+// #[macro_use]
+// extern crate log;
+
 extern crate itertools;
+extern crate strsim;
 
 use std::fmt::Debug;
 

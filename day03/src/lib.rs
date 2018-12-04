@@ -88,6 +88,7 @@
 
 // #[macro_use]
 // extern crate log;
+
 extern crate ndarray;
 
 use std::fmt::Debug;
