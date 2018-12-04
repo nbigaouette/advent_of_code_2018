@@ -183,16 +183,14 @@ pub fn parse_line(input: &str) -> Line {
         ).unwrap();
         static ref RE_ACTION_BEGINS_SHIFT: Regex =
             Regex::new(r"Guard #(?P<id>\d+) begins shift").unwrap();
-        static ref RE_ACTION_FALLS_ASLEEP: Regex = Regex::new("falls asleep").unwrap();
-        static ref RE_ACTION_WAKES_UP: Regex = Regex::new("wakes up").unwrap();
     }
     let caps = RE_LINE.captures(input).unwrap();
 
     let action = {
         let action_str = &caps["action"];
-        if RE_ACTION_WAKES_UP.is_match(action_str) {
+        if action_str.contains("wakes up") {
             Action::WakesUp
-        } else if RE_ACTION_FALLS_ASLEEP.is_match(action_str) {
+        } else if action_str.contains("falls asleep") {
             Action::FallsAsleep
         } else {
             let caps_begins_shift = RE_ACTION_BEGINS_SHIFT.captures(action_str).unwrap();
