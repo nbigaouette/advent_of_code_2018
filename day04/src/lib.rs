@@ -223,22 +223,6 @@ pub fn parse_input(input: &str) -> Vec<Day> {
     let lines: Vec<Line> = {
         let mut tmp_lines: Vec<Line> = input.lines().map(|line| parse_line(line)).collect();
 
-        // // Normalize shifts beginning at midnight
-        // tmp_lines.iter_mut().for_each(|line| {
-        //     match line.action {
-        //         Action::BeginsShift(..) => {
-        //             // NOTE: The day can "overflow" a real date (say 32nd), but we don't care.
-        //             let norm_hour = line.hour * 100 + line.minute;
-        //             if 2300 <= norm_hour {
-        //                 line.day += 1
-        //             }
-        //             line.hour = 0;
-        //             line.minute = 0;
-        //         }
-        //         _ => { /* */ }
-        //     }
-        // });
-
         // Sort by date
         tmp_lines.as_mut_slice().sort_by_key(|line| {
             line.year * MINUTES_PER_YEAR
@@ -282,11 +266,6 @@ pub fn parse_input(input: &str) -> Vec<Day> {
                     break;
                 }
                 Some(line) => {
-                    // if day.day != line.day {
-                    //     // We've hit a next day. Break the loop.
-                    //     warn!("Next day. Breaking.");
-                    //     break;
-                    // }
                     match line.action {
                         Action::BeginsShift(..) => {
                             // We've hit a shift change. Break the loop
