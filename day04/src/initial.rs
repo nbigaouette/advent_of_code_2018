@@ -70,8 +70,44 @@ impl<'a> AoC<'a> for Day04Initial<'a> {
         most_lazy_id * most_lazy_minute
     }
 
-    // fn solution_part2(&self) -> Self::SolutionPart2 {
-    // }
+    fn solution_part2(&self) -> Self::SolutionPart2 {
+        let parsed: Vec<Day> = parse_input(self.input);
+
+        let hours_slept: Vec<(GuardId, Vec<i64>)> = parsed
+            .iter()
+            .map(|day| {
+                let hours_slept_int: Vec<i64> = day
+                    .sleeping
+                    .iter()
+                    .map(|&is_sleeping| if is_sleeping { 1 } else { 0 })
+                    .collect();
+                (day.id, hours_slept_int)
+            }).collect();
+
+        let mut guards_sleep_pattern: HashMap<GuardId, Vec<i64>> = HashMap::new();
+        for (id, hours) in hours_slept {
+            let guard_sleep_pattern = guards_sleep_pattern.entry(id).or_insert(vec![0; 60]);
+            // Sum the guard's sleep pattern with the one from the vector
+            for (l, r) in guard_sleep_pattern.iter_mut().zip(hours.iter()) {
+                *l += r;
+            }
+        }
+
+        // Find the most lazy guard
+        let (most_lazy_id, most_lazy_pattern) = guards_sleep_pattern
+            .iter()
+            .max_by_key(|(_id, pattern)| pattern.iter().max())
+            .unwrap();
+
+        // Find the most lazy minute
+        let (most_lazy_minute, _most_lazy_minute_count) = most_lazy_pattern
+            .iter()
+            .enumerate()
+            .max_by_key(|(_minute, &slept)| slept)
+            .unwrap();
+
+        (most_lazy_minute as i64) * most_lazy_id
+    }
 }
 
 #[cfg(test)]
@@ -140,9 +176,7 @@ mod tests {
             fn solution() {
                 init_logger();
 
-                unimplemented!();
-
-                let expected = 0;
+                let expected = 36896;
                 let to_check = Day04Initial::new(PUZZLE_INPUT).solution_part2();
 
                 assert_eq!(expected, to_check);
@@ -157,10 +191,24 @@ mod tests {
             fn ex01() {
                 init_logger();
 
-                unimplemented!();
-
-                let expected = 0;
-                let input = "";
+                let expected = 4455;
+                let input = "[1518-11-01 00:00] Guard #10 begins shift
+                             [1518-11-01 00:05] falls asleep
+                             [1518-11-01 00:25] wakes up
+                             [1518-11-01 00:30] falls asleep
+                             [1518-11-01 00:55] wakes up
+                             [1518-11-01 23:58] Guard #99 begins shift
+                             [1518-11-02 00:40] falls asleep
+                             [1518-11-02 00:50] wakes up
+                             [1518-11-03 00:05] Guard #10 begins shift
+                             [1518-11-03 00:24] falls asleep
+                             [1518-11-03 00:29] wakes up
+                             [1518-11-04 00:02] Guard #99 begins shift
+                             [1518-11-04 00:36] falls asleep
+                             [1518-11-04 00:46] wakes up
+                             [1518-11-05 00:03] Guard #99 begins shift
+                             [1518-11-05 00:45] falls asleep
+                             [1518-11-05 00:55] wakes up";
                 let to_check = Day04Initial::new(input).solution_part2();
 
                 assert_eq!(expected, to_check);
