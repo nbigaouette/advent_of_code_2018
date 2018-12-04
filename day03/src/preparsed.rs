@@ -13,14 +13,14 @@ struct Coord {
     j: usize,
 }
 
-fn solution_part1(input: &Vec<Input>) -> (Day03SolutionPart1, HashMap<Coord, Vec<usize>>) {
+fn solution_part1(input: &[Input]) -> (Day03SolutionPart1, HashMap<Coord, Vec<usize>>) {
     let mut count = 0;
     let mut seen = HashMap::new();
     for claim in input {
         for i in claim.left..(claim.left + claim.wide) {
             for j in claim.top..(claim.top + claim.tall) {
                 let coord = Coord { i, j };
-                let point = seen.entry(coord).or_insert(vec![]);
+                let point = seen.entry(coord).or_insert_with(Vec::new);
                 point.push(claim.id);
                 if point.len() == 2 {
                     count += 1;
@@ -61,7 +61,7 @@ impl<'a> AoC<'a> for Day03Preparsed {
             for i in claim.left..(claim.left + claim.wide) {
                 for j in claim.top..(claim.top + claim.tall) {
                     let coord = Coord { i, j };
-                    let ids_at_coord = seen.get(&coord).unwrap();
+                    let ids_at_coord = &seen[&coord];
                     if ids_at_coord.len() >= 2 {
                         for id_at_coord in ids_at_coord {
                             claims.remove(&id_at_coord);

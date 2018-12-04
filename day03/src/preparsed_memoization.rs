@@ -14,7 +14,7 @@ struct Coord {
 }
 
 fn solution(
-    input: &Vec<Input>,
+    input: &[Input],
 ) -> (
     Day03SolutionPart1,
     HashMap<Coord, Vec<usize>>,
@@ -27,7 +27,7 @@ fn solution(
         for i in claim.left..(claim.left + claim.wide) {
             for j in claim.top..(claim.top + claim.tall) {
                 let coord = Coord { i, j };
-                let ids_at_coord = seen.entry(coord).or_insert(vec![]);
+                let ids_at_coord = seen.entry(coord).or_insert_with(Vec::new);
                 ids_at_coord.push(claim.id);
                 if ids_at_coord.len() == 2 {
                     count += 1;

@@ -240,7 +240,7 @@ pub fn parse_input(input: &str) -> Vec<Day> {
 
     let mut lines_iter = lines.iter().peekable();
     let mut days: Vec<Day> = Vec::new();
-    while !lines_iter.peek().is_none() {
+    while lines_iter.peek().is_some() {
         let mut day = {
             let first_line = lines_iter.next().unwrap();
             // First line should always be a guard shift beginning
@@ -266,12 +266,9 @@ pub fn parse_input(input: &str) -> Vec<Day> {
                     break;
                 }
                 Some(line) => {
-                    match line.action {
-                        Action::BeginsShift(..) => {
-                            // We've hit a shift change. Break the loop
-                            break;
-                        }
-                        _ => { /* */ }
+                    if let Action::BeginsShift(..) = line.action {
+                        // We've hit a shift change. Break the loop
+                        break;
                     }
                 }
             }

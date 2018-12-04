@@ -155,7 +155,7 @@ pub fn parse_input_str<'a>(input: &'a str) -> impl Iterator<Item = InputStr<'a>>
 }
 
 pub fn parse_input<'a>(input: &'a str) -> impl Iterator<Item = Input> + 'a {
-    parse_input_str(input).map(|i| Input::from(i))
+    parse_input_str(input).map(Input::from)
 }
 
 pub static PUZZLE_INPUT: &str = include_str!("../input");

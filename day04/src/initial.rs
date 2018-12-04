@@ -86,7 +86,9 @@ impl<'a> AoC<'a> for Day04Initial<'a> {
 
         let mut guards_sleep_pattern: HashMap<GuardId, Vec<i64>> = HashMap::new();
         for (id, hours) in hours_slept {
-            let guard_sleep_pattern = guards_sleep_pattern.entry(id).or_insert(vec![0; 60]);
+            let guard_sleep_pattern = guards_sleep_pattern
+                .entry(id)
+                .or_insert_with(|| vec![0; 60]);
             // Sum the guard's sleep pattern with the one from the vector
             for (l, r) in guard_sleep_pattern.iter_mut().zip(hours.iter()) {
                 *l += r;
