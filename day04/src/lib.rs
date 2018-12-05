@@ -117,6 +117,9 @@ use regex::Regex;
 pub mod initial;
 pub use initial::Day04Initial;
 
+pub mod preparsed;
+pub use preparsed::Day04PreParsed;
+
 type Day04SolutionPart1 = i64;
 type Day04SolutionPart2 = i64;
 
@@ -312,7 +315,10 @@ pub mod benchmark {
     >;
 
     pub fn to_benchmark<'a>() -> BenchmarkVector<'a> {
-        vec![Box::new(Day04Initial::new(PUZZLE_INPUT))]
+        vec![
+            Box::new(Day04Initial::new(PUZZLE_INPUT)),
+            Box::new(Day04PreParsed::new(PUZZLE_INPUT)),
+        ]
     }
 }
 
