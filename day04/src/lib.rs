@@ -120,6 +120,9 @@ pub use initial::Day04Initial;
 pub mod preparsed;
 pub use preparsed::Day04PreParsed;
 
+pub mod preparsed_full;
+pub use preparsed_full::Day04PreParsedFull;
+
 type Day04SolutionPart1 = i64;
 type Day04SolutionPart2 = i64;
 
@@ -318,6 +321,7 @@ pub mod benchmark {
         vec![
             Box::new(Day04Initial::new(PUZZLE_INPUT)),
             Box::new(Day04PreParsed::new(PUZZLE_INPUT)),
+            Box::new(Day04PreParsedFull::new(PUZZLE_INPUT)),
         ]
     }
 }
