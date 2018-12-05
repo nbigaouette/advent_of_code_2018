@@ -47,11 +47,6 @@ pub trait AoC<'a>: Debug {
     }
 }
 
-fn parse_input<'a>(input: &'a str) -> impl Iterator<Item = i64> + 'a {
-    unimplemented!();
-    vec![].into_iter()
-}
-
 pub static PUZZLE_INPUT: &str = include_str!("../input");
 
 pub mod benchmark {
@@ -87,7 +82,8 @@ mod tests {
                 println!("Setting to: {}", rust_log);
                 env::set_var("RUST_LOG", &rust_log);
                 Ok(rust_log)
-            }).unwrap();
+            })
+            .unwrap();
         let _ = env_logger::try_init();
     }
 

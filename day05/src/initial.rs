@@ -1,4 +1,4 @@
-use crate::{parse_input, AoC, Day05SolutionPart1, Day05SolutionPart2};
+use crate::{AoC, Day05SolutionPart1, Day05SolutionPart2};
 
 #[derive(Debug)]
 pub struct Day05Initial<'a> {
@@ -52,10 +52,8 @@ mod tests {
             fn ex01() {
                 init_logger();
 
-                unimplemented!();
-
-                let expected = 0;
-                let input = "";
+                let expected = 10;
+                let input = "dabAcCaCBAcCcaDA";
                 let to_check = Day05Initial::new(input).solution_part1();
 
                 assert_eq!(expected, to_check);
@@ -98,7 +96,7 @@ mod tests {
                 unimplemented!();
 
                 let expected = 0;
-                let input = "";
+                let input = "dabAcCaCBAcCcaDA";
                 let to_check = Day05Initial::new(input).solution_part2();
 
                 assert_eq!(expected, to_check);
