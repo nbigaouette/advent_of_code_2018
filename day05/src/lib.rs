@@ -88,8 +88,8 @@ use std::fmt::Debug;
 pub mod initial;
 pub use initial::Day05Initial;
 
-type Day05SolutionPart1 = i64;
-type Day05SolutionPart2 = i64;
+type Day05SolutionPart1 = usize;
+type Day05SolutionPart2 = usize;
 
 pub trait AoC<'a>: Debug {
     type SolutionPart1;
@@ -125,10 +125,9 @@ pub mod benchmark {
     >;
 
     pub fn to_benchmark<'a>() -> BenchmarkVector<'a> {
-        unimplemented!()
-        // vec![
-        //     Box::new(Day05Initial::new(PUZZLE_INPUT)),
-        // ]
+        vec![
+            Box::new(Day05Initial::new(PUZZLE_INPUT)),
+        ]
     }
 }
 
