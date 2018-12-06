@@ -88,6 +88,9 @@ use std::fmt::Debug;
 pub mod initial;
 pub use initial::Day05Initial;
 
+pub mod initial_parallel_part2;
+pub use initial_parallel_part2::Day05InitialParallelPart2;
+
 type Day05SolutionPart1 = usize;
 type Day05SolutionPart2 = usize;
 
@@ -127,6 +130,7 @@ pub mod benchmark {
     pub fn to_benchmark<'a>() -> BenchmarkVector<'a> {
         vec![
             Box::new(Day05Initial::new(PUZZLE_INPUT)),
+            // Box::new(Day05InitialParallelPart2::new(PUZZLE_INPUT)),
         ]
     }
 }
