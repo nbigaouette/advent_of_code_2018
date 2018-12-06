@@ -140,9 +140,9 @@ pub mod benchmark {
         vec![
             Box::new(Day05Initial::new(PUZZLE_INPUT)),
             // Box::new(Day05InitialParallelPart2::new(PUZZLE_INPUT)),
-            // Box::new(Day05ExplicitLoop::new(PUZZLE_INPUT)),
-            // Box::new(Day05IteratorFold::new(PUZZLE_INPUT)),
-            // Box::new(Day05IteratorScan::new(PUZZLE_INPUT)),
+            Box::new(Day05ExplicitLoop::new(PUZZLE_INPUT)),
+            Box::new(Day05IteratorFold::new(PUZZLE_INPUT)),
+            Box::new(Day05IteratorScan::new(PUZZLE_INPUT)),
         ]
     }
 }
