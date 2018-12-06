@@ -16,7 +16,8 @@ fn criterion_benchmark_part1(c: &mut Criterion) {
                 &s.description().replace(" ", "_"),
                 move |b: &mut Bencher, _: &()| b.iter(|| s.solution_part1()),
             )
-        }).collect();
+        })
+        .collect();
 
     c.bench_functions("day05_part1", functions, ());
 }
@@ -29,7 +30,8 @@ fn criterion_benchmark_part2(c: &mut Criterion) {
                 &s.description().replace(" ", "_"),
                 move |b: &mut Bencher, _: &()| b.iter(|| s.solution_part2()),
             )
-        }).collect();
+        })
+        .collect();
 
     c.bench_functions("day05_part2", functions, ());
 }
