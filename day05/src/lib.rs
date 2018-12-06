@@ -100,6 +100,9 @@ pub use iter_fold::Day05IteratorFold;
 pub mod iter_scan;
 pub use iter_scan::Day05IteratorScan;
 
+pub mod stack;
+pub use stack::Day05Stack;
+
 type Day05SolutionPart1 = usize;
 type Day05SolutionPart2 = usize;
 
@@ -139,10 +142,11 @@ pub mod benchmark {
     pub fn to_benchmark<'a>() -> BenchmarkVector<'a> {
         vec![
             Box::new(Day05Initial::new(PUZZLE_INPUT)),
-            // Box::new(Day05InitialParallelPart2::new(PUZZLE_INPUT)),
+            Box::new(Day05InitialParallelPart2::new(PUZZLE_INPUT)),
             Box::new(Day05ExplicitLoop::new(PUZZLE_INPUT)),
             Box::new(Day05IteratorFold::new(PUZZLE_INPUT)),
             Box::new(Day05IteratorScan::new(PUZZLE_INPUT)),
+            Box::new(Day05Stack::new(PUZZLE_INPUT)),
         ]
     }
 }
