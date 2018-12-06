@@ -7,9 +7,6 @@ before_deploy:
   - cargo doc --no-deps
   - mkdir public
   - cp -r target/doc/* public/
-  - pwd
-  - ls
-  - find
   # Copy benchmark information
   - for day in day*; do cp -r ${day}/target/criterion/* public/${day}; done
   # Adapt links from docs to benchmark information
