@@ -4,7 +4,7 @@ cache:
   - cargo
 
 before_deploy:
-  - cargo doc
+  - cargo doc --no-deps
   - mkdir public
   - cp -r target/doc/* public/
   - pwd
