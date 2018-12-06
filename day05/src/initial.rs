@@ -40,7 +40,7 @@ mod tests {
                 let expected = 0;
                 let to_check = Day05Initial::new(PUZZLE_INPUT).solution_part1();
 
-                assert_eq!(expected, to_check);
+                assert_eq!(to_check, expected);
             }
         }
 
@@ -56,7 +56,7 @@ mod tests {
                 let input = "dabAcCaCBAcCcaDA";
                 let to_check = Day05Initial::new(input).solution_part1();
 
-                assert_eq!(expected, to_check);
+                assert_eq!(to_check, expected);
             }
         }
 
@@ -81,7 +81,7 @@ mod tests {
                 let expected = 0;
                 let to_check = Day05Initial::new(PUZZLE_INPUT).solution_part2();
 
-                assert_eq!(expected, to_check);
+                assert_eq!(to_check, expected);
             }
         }
 
@@ -99,7 +99,7 @@ mod tests {
                 let input = "dabAcCaCBAcCcaDA";
                 let to_check = Day05Initial::new(input).solution_part2();
 
-                assert_eq!(expected, to_check);
+                assert_eq!(to_check, expected);
             }
         }
 

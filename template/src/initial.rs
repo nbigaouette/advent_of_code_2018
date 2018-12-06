@@ -40,7 +40,7 @@ mod tests {
                 let expected = 0;
                 let to_check = DayXXInitial::new(PUZZLE_INPUT).solution_part1();
 
-                assert_eq!(expected, to_check);
+                assert_eq!(to_check, expected);
             }
         }
 
@@ -58,13 +58,14 @@ mod tests {
                 let input = "";
                 let to_check = DayXXInitial::new(input).solution_part1();
 
-                assert_eq!(expected, to_check);
+                assert_eq!(to_check, expected);
             }
         }
 
         /*
         mod extra {
-            use ::*;
+            use super::super::super::DayXXInitial;
+            use crate::{tests::init_logger, AoC, PUZZLE_INPUT};
         }
         */
     }
@@ -83,7 +84,7 @@ mod tests {
                 let expected = 0;
                 let to_check = DayXXInitial::new(PUZZLE_INPUT).solution_part2();
 
-                assert_eq!(expected, to_check);
+                assert_eq!(to_check, expected);
             }
         }
 
@@ -101,13 +102,14 @@ mod tests {
                 let input = "";
                 let to_check = DayXXInitial::new(input).solution_part2();
 
-                assert_eq!(expected, to_check);
+                assert_eq!(to_check, expected);
             }
         }
 
         /*
         mod extra {
-            use ::*;
+            use super::super::super::DayXXInitial;
+            use crate::{tests::init_logger, AoC, PUZZLE_INPUT};
         }
         */
     }
