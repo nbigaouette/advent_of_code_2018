@@ -80,10 +80,6 @@ pub fn solution_part1_scan(input: &str) -> String {
     let mut to_scan = input.trim().as_bytes().to_vec();
     let mut tmp: Vec<u8> = Vec::with_capacity(to_scan.len());
     let mut prev_len = to_scan.len();
-    // struct FoldAccumulator {
-    //     vec: Vec<u8>,
-    //     skip: bool,
-    // };
     loop {
         tmp.clear();
         let mut match_found = false;
