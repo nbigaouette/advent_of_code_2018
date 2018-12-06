@@ -94,6 +94,9 @@ pub use initial_parallel_part2::Day05InitialParallelPart2;
 pub mod explicit_loop;
 pub use explicit_loop::Day05ExplicitLoop;
 
+pub mod iter_fold;
+pub use iter_fold::Day05IteratorFold;
+
 type Day05SolutionPart1 = usize;
 type Day05SolutionPart2 = usize;
 
@@ -135,6 +138,7 @@ pub mod benchmark {
             Box::new(Day05Initial::new(PUZZLE_INPUT)),
             // Box::new(Day05InitialParallelPart2::new(PUZZLE_INPUT)),
             // Box::new(Day05ExplicitLoop::new(PUZZLE_INPUT)),
+            // Box::new(Day05IteratorFold::new(PUZZLE_INPUT)),
         ]
     }
 }
