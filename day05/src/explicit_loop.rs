@@ -153,6 +153,7 @@ mod tests {
             use super::super::super::Day05ExplicitLoop;
             use crate::{tests::init_logger, AoC, PUZZLE_INPUT};
 
+            #[ignore]
             #[test]
             fn solution() {
                 init_logger();
