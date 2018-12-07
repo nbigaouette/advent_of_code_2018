@@ -43,7 +43,7 @@ pub fn solution_part1(input: &str) -> Result<Day06SolutionPart1> {
     let (mut grid, grid_offset) = new_grid(&bounding_box);
 
     for (id, pos) in positions.iter().enumerate() {
-        grid[pos.ij(&grid_offset)] = Cell::C(id as CoordinateId);
+        grid[pos.ij(&grid_offset)] = Cell::Closest(id as CoordinateId);
     }
 
     // Fill grid
@@ -58,7 +58,7 @@ pub fn solution_part1(input: &str) -> Result<Day06SolutionPart1> {
         .map(|(id, _pos)| {
             grid.iter()
                 .filter(move |cell| match cell {
-                    Cell::C(cell_id) => cell_id == &(id as u32),
+                    Cell::Closest(cell_id) => cell_id == &(id as u32),
                     _ => false,
                 })
                 .count()
@@ -78,7 +78,7 @@ pub fn solution_part2(input: &str, max_distance: i64) -> Result<Day06SolutionPar
     let (mut grid, grid_offset) = new_grid(&bounding_box);
 
     for (id, pos) in positions.iter().enumerate() {
-        grid[pos.ij(&grid_offset)] = Cell::C(id as CoordinateId);
+        grid[pos.ij(&grid_offset)] = Cell::Closest(id as CoordinateId);
     }
 
     // Fill grid
@@ -86,16 +86,16 @@ pub fn solution_part2(input: &str, max_distance: i64) -> Result<Day06SolutionPar
 
     Ok(grid
         .iter()
-        .filter(|&cell| *cell == Cell::C(SAFE_CELL_MARKER))
+        .filter(|&cell| *cell == Cell::Closest(SAFE_CELL_MARKER))
         .count() as Day06SolutionPart2)
 }
 
 pub type CoordinateId = u32;
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum Cell {
-    U___,
-    C(CoordinateId),
-    T___,
+    Unoccupied,
+    Closest(CoordinateId),
+    Tied,
 }
 pub type Grid = Array2<Cell>;
 
@@ -108,7 +108,7 @@ pub fn boundaries(grid: &Grid) -> HashSet<CoordinateId> {
     let mut boundary_elements = HashSet::new();
     for element in boundary_elements_dup {
         match element {
-            Cell::C(id) => {
+            Cell::Closest(id) => {
                 boundary_elements.insert(*id);
             }
             _ => { /* */ }
@@ -132,7 +132,7 @@ fn fill_grid_part1(grid: &mut Grid, bounding_box: &BoundingBox, positions: &[Pos
             x: i_i64 + bounding_box.xmin,
             y: j_i64 + bounding_box.ymin,
         };
-        if *cell == Cell::U___ {
+        if *cell == Cell::Unoccupied {
             for (id, pos) in positions.iter().enumerate() {
                 let distance = manhattan_distance(pos, &cell_pos);
                 if min_dist == distance {
@@ -146,9 +146,9 @@ fn fill_grid_part1(grid: &mut Grid, bounding_box: &BoundingBox, positions: &[Pos
             assert!(!closest_id.is_empty());
 
             if closest_id.len() == 1 {
-                *cell = Cell::C(closest_id[0]);
+                *cell = Cell::Closest(closest_id[0]);
             } else {
-                *cell = Cell::T___;
+                *cell = Cell::Tied;
             }
         }
     }
@@ -175,7 +175,7 @@ fn fill_grid_part2(
             .map(|pos| manhattan_distance(pos, &cell_pos))
             .sum();
         if distances_sum < max_distance_sum {
-            *cell = Cell::C(SAFE_CELL_MARKER);
+            *cell = Cell::Closest(SAFE_CELL_MARKER);
         }
     }
 }
@@ -189,7 +189,7 @@ pub fn new_grid(bounding_box: &BoundingBox) -> (Grid, [i64; 2]) {
                 bounding_box.height() as usize,
                 bounding_box.width() as usize,
             ),
-            Cell::U___,
+            Cell::Unoccupied,
         ),
         grid_offset,
     )
@@ -324,192 +324,192 @@ mod tests {
                 let bounding_box = find_bounding_box(&positions).unwrap();
                 let (mut grid, grid_offset) = new_grid(&bounding_box);
                 for (id, pos) in positions.iter().enumerate() {
-                    grid[pos.ij(&grid_offset)] = Cell::C(id as u32);
+                    grid[pos.ij(&grid_offset)] = Cell::Closest(id as u32);
                 }
                 let expected_initial = arr2(&[
                     [
-                        Cell::C(0),
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
+                        Cell::Closest(0),
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
                     ],
                     [
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
                     ],
                     [
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::C(2),
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Closest(2),
                     ],
                     [
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::C(3),
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Closest(3),
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
                     ],
                     [
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::C(4),
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Closest(4),
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
                     ],
                     [
-                        Cell::C(1),
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
+                        Cell::Closest(1),
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
                     ],
                     [
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
                     ],
                     [
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
                     ],
                     [
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::U___,
-                        Cell::C(5),
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Unoccupied,
+                        Cell::Closest(5),
                     ],
                 ]);
                 assert_eq!(grid, expected_initial);
                 fill_grid_part1(&mut grid, &bounding_box, &positions);
                 let expected_filed = arr2(&[
                     [
-                        Cell::C(0),
-                        Cell::C(0),
-                        Cell::C(0),
-                        Cell::C(0),
-                        Cell::T___,
-                        Cell::C(2),
-                        Cell::C(2),
-                        Cell::C(2),
+                        Cell::Closest(0),
+                        Cell::Closest(0),
+                        Cell::Closest(0),
+                        Cell::Closest(0),
+                        Cell::Tied,
+                        Cell::Closest(2),
+                        Cell::Closest(2),
+                        Cell::Closest(2),
                     ],
                     [
-                        Cell::C(0),
-                        Cell::C(0),
-                        Cell::C(3),
-                        Cell::C(3),
-                        Cell::C(4),
-                        Cell::C(2),
-                        Cell::C(2),
-                        Cell::C(2),
+                        Cell::Closest(0),
+                        Cell::Closest(0),
+                        Cell::Closest(3),
+                        Cell::Closest(3),
+                        Cell::Closest(4),
+                        Cell::Closest(2),
+                        Cell::Closest(2),
+                        Cell::Closest(2),
                     ],
                     [
-                        Cell::C(0),
-                        Cell::C(3),
-                        Cell::C(3),
-                        Cell::C(3),
-                        Cell::C(4),
-                        Cell::C(2),
-                        Cell::C(2),
-                        Cell::C(2),
+                        Cell::Closest(0),
+                        Cell::Closest(3),
+                        Cell::Closest(3),
+                        Cell::Closest(3),
+                        Cell::Closest(4),
+                        Cell::Closest(2),
+                        Cell::Closest(2),
+                        Cell::Closest(2),
                     ],
                     [
-                        Cell::T___,
-                        Cell::C(3),
-                        Cell::C(3),
-                        Cell::C(3),
-                        Cell::C(4),
-                        Cell::C(4),
-                        Cell::C(2),
-                        Cell::C(2),
+                        Cell::Tied,
+                        Cell::Closest(3),
+                        Cell::Closest(3),
+                        Cell::Closest(3),
+                        Cell::Closest(4),
+                        Cell::Closest(4),
+                        Cell::Closest(2),
+                        Cell::Closest(2),
                     ],
                     [
-                        Cell::C(1),
-                        Cell::T___,
-                        Cell::C(3),
-                        Cell::C(4),
-                        Cell::C(4),
-                        Cell::C(4),
-                        Cell::C(4),
-                        Cell::C(2),
+                        Cell::Closest(1),
+                        Cell::Tied,
+                        Cell::Closest(3),
+                        Cell::Closest(4),
+                        Cell::Closest(4),
+                        Cell::Closest(4),
+                        Cell::Closest(4),
+                        Cell::Closest(2),
                     ],
                     [
-                        Cell::C(1),
-                        Cell::C(1),
-                        Cell::T___,
-                        Cell::C(4),
-                        Cell::C(4),
-                        Cell::C(4),
-                        Cell::C(4),
-                        Cell::T___,
+                        Cell::Closest(1),
+                        Cell::Closest(1),
+                        Cell::Tied,
+                        Cell::Closest(4),
+                        Cell::Closest(4),
+                        Cell::Closest(4),
+                        Cell::Closest(4),
+                        Cell::Tied,
                     ],
                     [
-                        Cell::C(1),
-                        Cell::C(1),
-                        Cell::T___,
-                        Cell::C(4),
-                        Cell::C(4),
-                        Cell::C(4),
-                        Cell::C(5),
-                        Cell::C(5),
+                        Cell::Closest(1),
+                        Cell::Closest(1),
+                        Cell::Tied,
+                        Cell::Closest(4),
+                        Cell::Closest(4),
+                        Cell::Closest(4),
+                        Cell::Closest(5),
+                        Cell::Closest(5),
                     ],
                     [
-                        Cell::C(1),
-                        Cell::C(1),
-                        Cell::T___,
-                        Cell::C(4),
-                        Cell::C(4),
-                        Cell::C(5),
-                        Cell::C(5),
-                        Cell::C(5),
+                        Cell::Closest(1),
+                        Cell::Closest(1),
+                        Cell::Tied,
+                        Cell::Closest(4),
+                        Cell::Closest(4),
+                        Cell::Closest(5),
+                        Cell::Closest(5),
+                        Cell::Closest(5),
                     ],
                     [
-                        Cell::C(1),
-                        Cell::C(1),
-                        Cell::T___,
-                        Cell::C(5),
-                        Cell::C(5),
-                        Cell::C(5),
-                        Cell::C(5),
-                        Cell::C(5),
+                        Cell::Closest(1),
+                        Cell::Closest(1),
+                        Cell::Tied,
+                        Cell::Closest(5),
+                        Cell::Closest(5),
+                        Cell::Closest(5),
+                        Cell::Closest(5),
+                        Cell::Closest(5),
                     ],
                 ]);
                 assert_eq!(grid, expected_filed);
