@@ -1,8 +1,6 @@
 #[macro_use]
 extern crate criterion;
 
-extern crate dayXX;
-
 use criterion::Criterion;
 use criterion::{Bencher, Fun};
 
