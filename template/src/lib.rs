@@ -21,7 +21,7 @@
 use std::fmt::Debug;
 
 pub mod initial;
-pub use initial::DayXXInitial;
+pub use crate::initial::DayXXInitial;
 
 type DayXXSolutionPart1 = i64;
 type DayXXSolutionPart2 = i64;
