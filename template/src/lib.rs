@@ -21,7 +21,7 @@
 use std::fmt::Debug;
 
 pub mod initial;
-pub use initial::DayXXInitial;
+pub use crate::initial::DayXXInitial;
 
 type DayXXSolutionPart1 = i64;
 type DayXXSolutionPart2 = i64;
@@ -74,7 +74,7 @@ pub mod benchmark {
 
 #[cfg(test)]
 mod tests {
-    extern crate env_logger;
+    use env_logger;
     use std::env;
 
     use crate::parse_input;

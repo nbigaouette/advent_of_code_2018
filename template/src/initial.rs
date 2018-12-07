@@ -13,7 +13,7 @@ impl<'a> AoC<'a> for DayXXInitial<'a> {
         "Parse string dynamically"
     }
 
-    fn new(input: &'a str) -> DayXXInitial {
+    fn new(input: &'a str) -> DayXXInitial<'_> {
         DayXXInitial { input }
     }
 
