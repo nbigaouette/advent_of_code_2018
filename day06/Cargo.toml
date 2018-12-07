@@ -2,13 +2,17 @@
 name = "day06"
 version = "0.1.0"
 authors = ["Nicolas Bigaouette <nbigaouette@gmail.com>"]
+# edition = "2018"
 
 [dependencies]
 # log = "0.4"
+ndarray = "0.12"
+itertools = "0.7"
 
 [dev-dependencies]
 criterion = "0.2"
 env_logger = "0.6"
+pretty_assertions = "0.5"
 
 [[bench]]
 name = "aoc_benchmark"
