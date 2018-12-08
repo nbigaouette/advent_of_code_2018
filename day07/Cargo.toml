@@ -6,6 +6,7 @@ edition = "2018"
 
 [dependencies]
 # log = "0.4"
+petgraph = "0.4"
 
 [dev-dependencies]
 criterion = "0.2"
