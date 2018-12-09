@@ -23,7 +23,7 @@ use std::fmt::Debug;
 pub mod initial;
 pub use crate::initial::Day08Initial;
 
-type Day08SolutionPart1 = i64;
+type Day08SolutionPart1 = usize;
 type Day08SolutionPart2 = i64;
 
 pub trait AoC<'a>: Debug {
@@ -47,9 +47,8 @@ pub trait AoC<'a>: Debug {
     }
 }
 
-fn parse_input<'a>(input: &'a str) -> impl Iterator<Item = i64> + 'a {
-    unimplemented!();
-    vec![].into_iter()
+fn parse_input<'a>(input: &'a str) -> impl Iterator<Item = usize> + 'a {
+    input.trim().split(' ').map(|i| i.parse().unwrap())
 }
 
 pub static PUZZLE_INPUT: &str = include_str!("../input");
@@ -87,14 +86,18 @@ mod tests {
                 println!("Setting to: {}", rust_log);
                 env::set_var("RUST_LOG", &rust_log);
                 Ok(rust_log)
-            }).unwrap();
+            })
+            .unwrap();
         let _ = env_logger::try_init();
     }
 
     #[test]
     fn parse() {
-        unimplemented!();
-        let parsed: Vec<_> = parse_input("").collect();
-        assert_eq!(parsed, vec![]);
+        let input = "2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2";
+        let parsed: Vec<_> = parse_input(input).collect();
+        assert_eq!(
+            parsed,
+            vec![2, 3, 0, 3, 10, 11, 12, 1, 1, 0, 1, 99, 2, 1, 1, 2]
+        );
     }
 }
