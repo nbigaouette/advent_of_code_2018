@@ -52,10 +52,8 @@ mod tests {
             fn ex01() {
                 init_logger();
 
-                unimplemented!();
-
-                let expected = 0;
-                let input = "";
+                let expected = 138;
+                let input = "2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2";
                 let to_check = Day08Initial::new(input).solution_part1();
 
                 assert_eq!(to_check, expected);
