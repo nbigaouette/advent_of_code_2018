@@ -92,13 +92,13 @@
 //! marble were 100 times larger?_
 //!
 
-#[macro_use]
-extern crate log;
+// #[macro_use]
+// extern crate log;
 
 use std::fmt::Debug;
 
-#[macro_use]
-extern crate pretty_assertions;
+// #[macro_use]
+// extern crate pretty_assertions;
 use failure::{format_err, Error};
 
 pub mod initial;
@@ -164,10 +164,7 @@ pub mod benchmark {
     >;
 
     pub fn to_benchmark<'a>() -> BenchmarkVector<'a> {
-        unimplemented!()
-        // vec![
-        //     Box::new(Day09Initial::new(PUZZLE_INPUT)),
-        // ]
+        vec![Box::new(Day09Initial::new(PUZZLE_INPUT))]
     }
 }
 

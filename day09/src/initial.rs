@@ -414,9 +414,8 @@ mod tests {
         }
 
         mod extra {
-            use super::super::super::Day09Initial;
             use super::super::super::{parse_input, DoubleLinkedList, Game, Idx, Input};
-            use crate::{tests::init_logger, AoC, PUZZLE_INPUT};
+            use crate::tests::init_logger;
 
             #[test]
             fn double_linked_list() {
@@ -517,7 +516,7 @@ mod tests {
                 let mut expected_lines_iter = expected.lines();
                 assert_eq!(expected_lines_iter.next().unwrap().trim(), game.state());
                 (1..26)
-                    .map(|i| {
+                    .map(|_| {
                         game.next_player_step();
                         game.state().trim().to_string()
                     })
