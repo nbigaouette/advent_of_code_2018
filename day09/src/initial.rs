@@ -13,7 +13,7 @@ impl<'a> AoC<'a> for Day09Initial<'a> {
     type SolutionPart2 = Day09SolutionPart2;
 
     fn description(&self) -> &'static str {
-        "Parse string dynamically"
+        "Double Linked List"
     }
 
     fn new(input: &'a str) -> Day09Initial<'_> {
@@ -24,8 +24,9 @@ impl<'a> AoC<'a> for Day09Initial<'a> {
         solution_part1(self.input)
     }
 
-    // fn solution_part2(&self) -> Self::SolutionPart2 {
-    // }
+    fn solution_part2(&self) -> Self::SolutionPart2 {
+        solution_part2(self.input)
+    }
 }
 
 macro_rules! autoderef_newtype {
@@ -302,6 +303,27 @@ fn solution_part1(input: &str) -> Day09SolutionPart1 {
         .unwrap()
 }
 
+fn solution_part2(input: &str) -> Day09SolutionPart1 {
+    let Input {
+        nb_players,
+        last_marble_points,
+    } = parse_input(input).unwrap();
+
+    let last_marble_points = 100 * last_marble_points;
+
+    let mut game = Game::new(nb_players, last_marble_points);
+
+    for _ in 0..last_marble_points {
+        game.next_player_step();
+    }
+
+    game.players
+        .iter()
+        .map(|player| player.score())
+        .max()
+        .unwrap()
+}
+
 #[cfg(test)]
 mod tests {
     mod part1 {
@@ -497,16 +519,9 @@ mod tests {
                 (1..26)
                     .map(|i| {
                         game.next_player_step();
-                        // println!("-----------------------------------");
-                        // println!("game.marbles.data: {:?}", game.marbles.data,);
                         game.state().trim().to_string()
                     })
                     .zip(expected_lines_iter)
-                    // .inspect(|(to_check, expected)| {
-                    //     println!("-----------------------------------");
-                    //     println!("to_check: {}", to_check);
-                    //     println!("expected: {}", expected);
-                    // })
                     .for_each(|(to_check, expected)| assert_eq!(to_check, expected));
             }
 
@@ -522,38 +537,11 @@ mod tests {
             fn solution() {
                 init_logger();
 
-                unimplemented!();
-
-                let expected = 0;
+                let expected = 3352920421;
                 let to_check = Day09Initial::new(PUZZLE_INPUT).solution_part2();
 
                 assert_eq!(to_check, expected);
             }
         }
-
-        mod given {
-            use super::super::super::Day09Initial;
-            use crate::{tests::init_logger, AoC};
-
-            #[test]
-            fn ex01() {
-                init_logger();
-
-                unimplemented!();
-
-                let expected = 0;
-                let input = "";
-                let to_check = Day09Initial::new(input).solution_part2();
-
-                assert_eq!(to_check, expected);
-            }
-        }
-
-        /*
-        mod extra {
-            use super::super::super::Day09Initial;
-            use crate::{tests::init_logger, AoC, PUZZLE_INPUT};
-        }
-        */
     }
 }

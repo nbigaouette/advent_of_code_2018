@@ -28,7 +28,7 @@ pub mod initial;
 pub use crate::initial::Day09Initial;
 
 type Day09SolutionPart1 = u64;
-type Day09SolutionPart2 = i64;
+type Day09SolutionPart2 = u64;
 
 pub trait AoC<'a>: Debug {
     type SolutionPart1;
