@@ -5,7 +5,9 @@ authors = ["Nicolas Bigaouette <nbigaouette@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-# log = "0.4"
+failure = "0.1"
+pretty_assertions = "0.5"
+log = "0.4"
 
 [dev-dependencies]
 criterion = "0.2"

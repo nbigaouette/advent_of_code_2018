@@ -15,15 +15,19 @@
 //!
 //!
 
-// #[macro_use]
-// extern crate log;
+#[macro_use]
+extern crate log;
 
 use std::fmt::Debug;
+
+#[macro_use]
+extern crate pretty_assertions;
+use failure::{format_err, Error};
 
 pub mod initial;
 pub use crate::initial::Day09Initial;
 
-type Day09SolutionPart1 = i64;
+type Day09SolutionPart1 = u64;
 type Day09SolutionPart2 = i64;
 
 pub trait AoC<'a>: Debug {
@@ -47,9 +51,27 @@ pub trait AoC<'a>: Debug {
     }
 }
 
-fn parse_input<'a>(input: &'a str) -> impl Iterator<Item = i64> + 'a {
-    unimplemented!();
-    vec![].into_iter()
+#[derive(Debug, PartialEq)]
+pub struct Input {
+    nb_players: usize,
+    last_marble_points: usize,
+}
+
+pub fn parse_input(input: &str) -> Result<Input, Error> {
+    let mut words = input.split_whitespace();
+    let nb_players = words
+        .next()
+        .ok_or_else(|| format_err!("Cannot extract number of players"))?
+        .parse()?;
+    let last_marble_points = words
+        .nth(5)
+        .ok_or_else(|| format_err!("Cannot extract last marble's worth"))?
+        .parse()?;
+
+    Ok(Input {
+        nb_players,
+        last_marble_points,
+    })
 }
 
 pub static PUZZLE_INPUT: &str = include_str!("../input");
@@ -77,7 +99,7 @@ mod tests {
     use env_logger;
     use std::env;
 
-    use crate::parse_input;
+    use crate::{parse_input, Input};
 
     pub fn init_logger() {
         env::var("RUST_LOG")
@@ -87,14 +109,53 @@ mod tests {
                 println!("Setting to: {}", rust_log);
                 env::set_var("RUST_LOG", &rust_log);
                 Ok(rust_log)
-            }).unwrap();
+            })
+            .unwrap();
         let _ = env_logger::try_init();
     }
 
     #[test]
     fn parse() {
-        unimplemented!();
-        let parsed: Vec<_> = parse_input("").collect();
-        assert_eq!(parsed, vec![]);
+        let input = "9 players; last marble is worth 25 points";
+        let expected = Input {
+            nb_players: 9,
+            last_marble_points: 25,
+        };
+        assert_eq!(parse_input(input).unwrap(), expected);
+
+        let input = "10 players; last marble is worth 1618 points";
+        let expected = Input {
+            nb_players: 10,
+            last_marble_points: 1618,
+        };
+        assert_eq!(parse_input(input).unwrap(), expected);
+
+        let input = "13 players; last marble is worth 7999 points";
+        let expected = Input {
+            nb_players: 13,
+            last_marble_points: 7999,
+        };
+        assert_eq!(parse_input(input).unwrap(), expected);
+
+        let input = "17 players; last marble is worth 1104 points";
+        let expected = Input {
+            nb_players: 17,
+            last_marble_points: 1104,
+        };
+        assert_eq!(parse_input(input).unwrap(), expected);
+
+        let input = "21 players; last marble is worth 6111 points";
+        let expected = Input {
+            nb_players: 21,
+            last_marble_points: 6111,
+        };
+        assert_eq!(parse_input(input).unwrap(), expected);
+
+        let input = "30 players; last marble is worth 5807 points";
+        let expected = Input {
+            nb_players: 30,
+            last_marble_points: 5807,
+        };
+        assert_eq!(parse_input(input).unwrap(), expected);
     }
 }
