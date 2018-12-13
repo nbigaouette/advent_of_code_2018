@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["parse_input",""]],"mod":[["benchmark",""],["bound_check_elision",""],["initial",""]],"static":[["PUZZLE_INPUT",""]],"trait":[["AoC",""]]});

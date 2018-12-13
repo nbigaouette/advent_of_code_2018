@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["PotState",""]],"mod":[["benchmark",""],["initial",""]],"static":[["PUZZLE_INPUT",""]],"struct":[["InitialState",""],["Input",""],["Note",""]],"trait":[["AoC",""]]});

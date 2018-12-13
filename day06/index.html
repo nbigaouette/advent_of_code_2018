@@ -1,0 +1,157 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `day06` crate."><meta name="keywords" content="rust, rustlang, rust-lang, day06"><title>day06 - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Crate day06</p><div class="sidebar-elems"><a id='all-types' href='all.html'><p>See all day06's items</p></a><div class="block items"><ul><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li><li><a href="#statics">Statics</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'day06', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/day06/lib.rs.html#1-294' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>day06</a></span></h1><div class='docblock'><h1 id="day-06-chronal-coordinates" class="section-header"><a href="#day-06-chronal-coordinates">Day 06: Chronal Coordinates</a></h1>
+<p><a href="report/index.html">Benchmarking report</a>:</p>
+<ul>
+<li><a href="day06_part1/report/index.html">Part 1</a></li>
+<li><a href="day06_part2/report/index.html">Part 2</a></li>
+</ul>
+<h2 id="part-one" class="section-header"><a href="#part-one">Part One</a></h2>
+<p>The device on your wrist beeps several times, and once again you feel like you're falling.</p>
+<p>&quot;Situation critical,&quot; the device announces. &quot;Destination indeterminate. Chronal
+interference detected. Please specify new target coordinates.&quot;</p>
+<p>The device then produces a list of coordinates (your puzzle input). Are they places it
+thinks are safe or dangerous? It recommends you check manual page 729. The Elves did
+not give you a manual.</p>
+<p><em>If they're dangerous,</em> maybe you can minimize the danger by finding the coordinate
+that gives the largest distance from the other points.</p>
+<p>Using only the <a href="https://en.wikipedia.org/wiki/Taxicab_geometry">Manhattan distance</a>,
+determine the <em>area</em> around each coordinate by counting the number of
+<a href="https://en.wikipedia.org/wiki/Integer">integer</a> X,Y locations that are <em>closest</em>
+to that coordinate (and aren't <em>tied in distance</em> to any other coordinate).</p>
+<p>Your goal is to find the size of the <em>largest area</em> that isn't infinite. For
+example, consider the following list of coordinates:</p>
+<pre><code class="language-text">1, 1
+1, 6
+8, 3
+3, 4
+5, 5
+8, 9
+</code></pre>
+<p>If we name these coordinates <code>A</code> through <code>F</code>, we can draw them on a grid,
+putting <code>0,0</code> at the top left:</p>
+<pre><code class="language-text">..........
+.A........
+..........
+........C.
+...D......
+.....E....
+.B........
+..........
+..........
+........F.
+</code></pre>
+<p>This view is partial - the actual grid extends infinitely in all directions.
+Using the Manhattan distance, each location's closest coordinate can be determined,
+shown here in lowercase:</p>
+<pre><code class="language-text">aaaaa.cccc
+aAaaa.cccc
+aaaddecccc
+aadddeccCc
+..dDdeeccc
+bb.deEeecc
+bBb.eeee..
+bbb.eeefff
+bbb.eeffff
+bbb.ffffFf
+</code></pre>
+<p>Locations shown as <code>.</code> are equally far from two or more coordinates, and so they
+don't count as being closest to any.</p>
+<p>In this example, the areas of coordinates A, B, C, and F are infinite - while not
+shown here, their areas extend forever outside the visible grid. However, the
+areas of coordinates D and E are finite: D is closest to 9 locations, and E is
+closest to 17 (both including the coordinate's location itself). Therefore, in
+this example, the size of the largest area is <em>17</em>.</p>
+<p><em>What is the size of the largest area</em> that isn't infinite?</p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>On the other hand, <em>if the coordinates are safe</em>, maybe the best you can do is try
+to find a <em>region</em> near as many coordinates as possible.</p>
+<p>For example, suppose you want the sum of the <a href="https://en.wikipedia.org/wiki/Taxicab_geometry">Manhattan distance</a> to all of the coordinates to be
+<em>less than 32</em>. For each location, add up the distances to all of the given
+coordinates; if the total of those distances is less than 32, that location is
+within the desired region. Using the same coordinates as above, the resulting
+region looks like this:</p>
+<pre><code class="language-text">..........
+.A........
+..........
+...#$#..C.
+..#D###...
+..###E#...
+.B.###....
+..........
+..........
+........F.
+</code></pre>
+<p>In particular, consider the highlighted location <code>4,3</code> located at the top middle
+of the region. Its calculation is as follows, where <code>abs()</code> is the
+<a href="https://en.wikipedia.org/wiki/Absolute_value">absolute value</a> function:</p>
+<ul>
+<li>Distance to coordinate A: <code>abs(4-1) + abs(3-1) = 5</code></li>
+<li>Distance to coordinate B: <code>abs(4-1) + abs(3-6) = 6</code></li>
+<li>Distance to coordinate C: <code>abs(4-8) + abs(3-3) = 4</code></li>
+<li>Distance to coordinate D: <code>abs(4-3) + abs(3-4) = 2</code></li>
+<li>Distance to coordinate E: <code>abs(4-5) + abs(3-5) = 3</code></li>
+<li>Distance to coordinate F: <code>abs(4-8) + abs(3-9) = 10</code></li>
+<li>Total distance: <code>5 + 6 + 4 + 2 + 3 + 10 = 30</code></li>
+</ul>
+<p>Because the total distance to all coordinates (<code>30</code>) is less than 32, the location
+is <em>within</em> the region.</p>
+<p>This region, which also includes coordinates D and E, has a total size of <em>16</em>.</p>
+<p>Your actual region will need to be much larger than this example, though, instead
+including all locations with a total distance of less than <em>10000</em>.</p>
+<p><em>What is the size of the region containing all locations which have a total
+distance to all given coordinates of less than 10000?</em></p>
+</div><h2 id='reexports' class='section-header'><a href="#reexports">Re-exports</a></h2>
+<table><tr><td><code>pub use initial::<a class="struct" href="../day06/initial/struct.Day06Initial.html" title="struct day06::initial::Day06Initial">Day06Initial</a>;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="benchmark/index.html"
+                                  title='mod day06::benchmark'>benchmark</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="initial/index.html"
+                                  title='mod day06::initial'>initial</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.Position.html"
+                                  title='struct day06::Position'>Position</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table><h2 id='statics' class='section-header'><a href="#statics">Statics</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="static" href="static.PUZZLE_INPUT.html"
+                                  title='static day06::PUZZLE_INPUT'>PUZZLE_INPUT</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="trait" href="trait.AoC.html"
+                                  title='trait day06::AoC'>AoC</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.manhattan_distance.html"
+                                  title='fn day06::manhattan_distance'>manhattan_distance</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.parse_input.html"
+                                  title='fn day06::parse_input'>parse_input</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../";window.currentCrate = "day06";</script><script src="../aliases.js"></script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

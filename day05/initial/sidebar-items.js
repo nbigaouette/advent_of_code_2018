@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["solution_part1_multiple_steps",""],["solution_part1_one_step",""],["solution_part1_one_step_bytes",""]],"struct":[["Day05Initial",""]]});

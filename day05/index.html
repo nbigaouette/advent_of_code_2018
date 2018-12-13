@@ -1,0 +1,128 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `day05` crate."><meta name="keywords" content="rust, rustlang, rust-lang, day05"><title>day05 - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Crate day05</p><div class="sidebar-elems"><a id='all-types' href='all.html'><p>See all day05's items</p></a><div class="block items"><ul><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#statics">Statics</a></li><li><a href="#traits">Traits</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'day05', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/day05/lib.rs.html#1-171' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>day05</a></span></h1><div class='docblock'><h1 id="day-05-alchemical-reduction" class="section-header"><a href="#day-05-alchemical-reduction">Day 05: Alchemical Reduction</a></h1>
+<p><a href="report/index.html">Benchmarking report</a>:</p>
+<ul>
+<li><a href="day05_part1/report/index.html">Part 1</a></li>
+<li><a href="day05_part2/report/index.html">Part 2</a></li>
+</ul>
+<h2 id="part-one" class="section-header"><a href="#part-one">Part One</a></h2>
+<p>You've managed to sneak in to the prototype suit manufacturing lab. The Elves
+are making decent progress, but are still struggling with the suit's size
+reduction capabilities.</p>
+<p>While the very latest in 1518 alchemical technology might have solved their
+problem eventually, you can do better. You scan the chemical composition of
+the suit's material and discover that it is formed by extremely long
+<a href="https://en.wikipedia.org/wiki/Polymer">polymers</a> (one of which is
+available as your puzzle input).</p>
+<p>The polymer is formed by smaller <em>units</em> which, when triggered, react with
+each other such that two adjacent units of the same type and opposite
+polarity are destroyed. Units' types are represented by letters; units'
+polarity is represented by capitalization. For instance, <code>r</code> and <code>R</code> are
+units with the same type but opposite polarity, whereas <code>r</code> and <code>s</code> are
+entirely different types and do not react.</p>
+<p>For example:</p>
+<ul>
+<li>In <code>aA</code>, <code>a</code> and <code>A</code> react, leaving nothing behind.</li>
+<li>In <code>abBA</code>, <code>bB</code> destroys itself, leaving <code>aA</code>. As above, this then destroys
+itself, leaving nothing.</li>
+<li>In <code>abAB</code>, no two adjacent units are of the same type, and so nothing happens.</li>
+<li>In <code>aabAAB</code>, even though <code>aa</code> and <code>AA</code> are of the same type, their polarities
+match, and so nothing happens.</li>
+</ul>
+<p>Now, consider a larger example, <code>dabAcCaCBAcCcaDA</code>:</p>
+<pre><code class="language-text">dabAcCaCBAcCcaDA  The first 'cC' is removed.
+dabAaCBAcCcaDA    This creates 'Aa', which is removed.
+dabCBAcCcaDA      Either 'cC' or 'Cc' are removed (the result is the same).
+dabCBAcaDA        No further actions can be taken.
+</code></pre>
+<p>After all possible reactions, the resulting polymer contains <em>10 units</em>.</p>
+<p><em>How many units remain after fully reacting the polymer you scanned?</em> (Note:
+in this puzzle and others, the input is large; if you copy/paste your input,
+make sure you get the whole thing.)</p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>Time to improve the polymer.</p>
+<p>One of the unit types is causing problems; it's preventing the polymer from
+collapsing as much as it should. Your goal is to figure out which unit type
+is causing the most problems, remove all instances of it (regardless of
+polarity), fully react the remaining polymer, and measure its length.</p>
+<p>For example, again using the polymer <code>dabAcCaCBAcCcaDA</code> from above:</p>
+<ul>
+<li>Removing all <code>A</code>/<code>a</code> units produces <code>dbcCCBcCcD</code>. Fully reacting this
+polymer produces <code>dbCBcD</code>, which has length 6.</li>
+<li>Removing all <code>B</code>/<code>b</code> units produces <code>daAcCaCAcCcaDA</code>. Fully reacting
+this polymer produces <code>daCAcaDA</code>, which has length 8.</li>
+<li>Removing all <code>C</code>/<code>c</code> units produces <code>dabAaBAaDA</code>. Fully reacting this
+polymer produces <code>daDA</code>, which has length 4.</li>
+<li>Removing all <code>D</code>/<code>d</code> units produces <code>abAcCaCBAcCcaA</code>. Fully reacting
+this polymer produces <code>abCBAc</code>, which has length 6.</li>
+</ul>
+<p>In this example, removing all <code>C</code>/<code>c</code> units was best, producing the answer <em>4</em>.</p>
+<p><em>What is the length of the shortest polymer you can produce</em> by removing all
+units of exactly one type and fully reacting the result?</p>
+</div><h2 id='reexports' class='section-header'><a href="#reexports">Re-exports</a></h2>
+<table><tr><td><code>pub use initial::<a class="struct" href="../day05/initial/struct.Day05Initial.html" title="struct day05::initial::Day05Initial">Day05Initial</a>;</code></td></tr><tr><td><code>pub use initial_parallel_part2::<a class="struct" href="../day05/initial_parallel_part2/struct.Day05InitialParallelPart2.html" title="struct day05::initial_parallel_part2::Day05InitialParallelPart2">Day05InitialParallelPart2</a>;</code></td></tr><tr><td><code>pub use explicit_loop::<a class="struct" href="../day05/explicit_loop/struct.Day05ExplicitLoop.html" title="struct day05::explicit_loop::Day05ExplicitLoop">Day05ExplicitLoop</a>;</code></td></tr><tr><td><code>pub use iter_fold::<a class="struct" href="../day05/iter_fold/struct.Day05IteratorFold.html" title="struct day05::iter_fold::Day05IteratorFold">Day05IteratorFold</a>;</code></td></tr><tr><td><code>pub use iter_scan::<a class="struct" href="../day05/iter_scan/struct.Day05IteratorScan.html" title="struct day05::iter_scan::Day05IteratorScan">Day05IteratorScan</a>;</code></td></tr><tr><td><code>pub use stack::<a class="struct" href="../day05/stack/struct.Day05Stack.html" title="struct day05::stack::Day05Stack">Day05Stack</a>;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="benchmark/index.html"
+                                  title='mod day05::benchmark'>benchmark</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="explicit_loop/index.html"
+                                  title='mod day05::explicit_loop'>explicit_loop</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="initial/index.html"
+                                  title='mod day05::initial'>initial</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="initial_parallel_part2/index.html"
+                                  title='mod day05::initial_parallel_part2'>initial_parallel_part2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="iter_fold/index.html"
+                                  title='mod day05::iter_fold'>iter_fold</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="iter_scan/index.html"
+                                  title='mod day05::iter_scan'>iter_scan</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="stack/index.html"
+                                  title='mod day05::stack'>stack</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table><h2 id='statics' class='section-header'><a href="#statics">Statics</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="static" href="static.PUZZLE_INPUT.html"
+                                  title='static day05::PUZZLE_INPUT'>PUZZLE_INPUT</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="trait" href="trait.AoC.html"
+                                  title='trait day05::AoC'>AoC</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../";window.currentCrate = "day05";</script><script src="../aliases.js"></script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

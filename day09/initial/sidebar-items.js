@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Day09Initial",""],["DoubleLinkedList",""],["DoubleLinkedListIterator",""],["DoubleLinkedListNode",""],["DoubleLinkedListRevIterator",""],["Idx",""],["PlayerIdx",""]],"type":[["Marble",""],["PlayerScore",""]]});

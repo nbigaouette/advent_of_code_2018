@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["manhattan_distance",""],["parse_input",""]],"mod":[["benchmark",""],["initial",""]],"static":[["PUZZLE_INPUT",""]],"struct":[["Position",""]],"trait":[["AoC",""]]});

@@ -1,0 +1,107 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `day08` crate."><meta name="keywords" content="rust, rustlang, rust-lang, day08"><title>day08 - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Crate day08</p><div class="sidebar-elems"><a id='all-types' href='all.html'><p>See all day08's items</p></a><div class="block items"><ul><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#statics">Statics</a></li><li><a href="#traits">Traits</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'day08', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/day08/lib.rs.html#1-174' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>day08</a></span></h1><div class='docblock'><h1 id="day-08-memory-maneuver" class="section-header"><a href="#day-08-memory-maneuver">Day 08: Memory Maneuver</a></h1>
+<p><a href="report/index.html">Benchmarking report</a>:</p>
+<ul>
+<li><a href="day08_part1/report/index.html">Part 1</a></li>
+<li><a href="day08_part2/report/index.html">Part 2</a></li>
+</ul>
+<h2 id="part-one" class="section-header"><a href="#part-one">Part One</a></h2>
+<p>The sleigh is much easier to pull than you'd expect for something its weight.
+Unfortunately, neither you nor the Elves know which way the North Pole is from
+here.</p>
+<p>You check your wrist device for anything that might help. It seems to have some
+kind of navigation system! Activating the navigation system produces more bad
+news: &quot;Failed to start navigation system. Could not read software license file.&quot;</p>
+<p>The navigation system's license file consists of a list of numbers (your puzzle
+input). The numbers define a data structure which, when processed, produces
+some kind of <a href="https://en.wikipedia.org/wiki/Tree_(data_structure)">tree</a> that
+can be used to calculate the license number.</p>
+<p>The <em>tree</em> is made up of <em>nodes</em>; a single, outermost node forms the tree's <em>root</em>,
+and it contains all other nodes in the tree (or contains nodes that contain nodes,
+and so on).</p>
+<p>Specifically, a node consists of:</p>
+<ul>
+<li>A <em>header</em>, which is always exactly two numbers:
+<ul>
+<li>The quantity of child nodes.</li>
+<li>The quantity of metadata entries.</li>
+</ul>
+</li>
+<li>Zero or more <em>child nodes</em> (as specified in the header).</li>
+<li>One or more <em>metadata entries</em> (as specified in the header).</li>
+</ul>
+<p>Each child node is itself a node that has its own header, child nodes, and
+metadata. For example:</p>
+<pre><code class="language-text">2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2
+A----------------------------------
+    B----------- C-----------
+                     D-----
+</code></pre>
+<p>In this example, each node of the tree is also marked with an underline starting
+with a letter for easier identification. In it, there are four nodes:</p>
+<ul>
+<li><code>A</code>, which has <code>2</code> child nodes (<code>B</code>, <code>C</code>) and <code>3</code> metadata entries (<code>1</code>, <code>1</code>, <code>2</code>).</li>
+<li><code>B</code>, which has <code>0</code> child nodes and <code>3</code> metadata entries (<code>10</code>, <code>11</code>, <code>12</code>).</li>
+<li><code>C</code>, which has <code>1</code> child node (<code>D</code>) and <code>1</code> metadata entry (<code>2</code>).</li>
+<li><code>D</code>, which has <code>0</code> child nodes and <code>1</code> metadata entry (<code>99</code>).</li>
+</ul>
+<p>The first check done on the license file is to simply add up all of the metadata
+entries. In this example, that sum is <code>1+1+2+10+11+12+2+99=_138_</code>.</p>
+<p><em>What is the sum of all metadata entries?</em></p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>The second check is slightly more complicated: you need to find the value of the
+root node (<code>A</code> in the example above).</p>
+<p>The <em>value of a node</em> depends on whether it has child nodes.</p>
+<p>If a node has <em>no child nodes</em>, its value is the sum of its metadata entries. So,
+the value of node <code>B</code> is <code>10+11+12=33</code>, and the value of node <code>D</code> is <code>99</code>.</p>
+<p>However, if a node <em>does have child nodes</em>, the metadata entries become indexes
+which refer to those child nodes. A metadata entry of <code>1</code> refers to the first
+child node, <code>2</code> to the second, <code>3</code> to the third, and so on. The value of this
+node is the sum of the values of the child nodes referenced by the metadata
+entries. If a referenced child node does not exist, that reference is skipped.
+A child node can be referenced multiple time and counts each time it is referenced.
+A metadata entry of <code>0</code> does not refer to any child node.</p>
+<p>For example, again using the above nodes:</p>
+<ul>
+<li>Node <code>C</code> has one metadata entry, <code>2</code>. Because node <code>C</code> has only one child
+node, <code>2</code> references a child node which does not exist, and so the value of
+node <code>C</code> is <code>0</code>.</li>
+<li>Node <code>A</code> has three metadata entries: <code>1</code>, <code>1</code>, and <code>2</code>. The <code>1</code> references
+node <code>A</code>'s first child node, <code>B</code>, and the <code>2</code> references node <code>A</code>'s second
+child node, <code>C</code>. Because node B has a value of <code>33</code> and node <code>C</code> has a value
+of <code>0</code>, the value of node <code>A</code> is <code>33+33+0=_66_</code>.</li>
+</ul>
+<p>So, in this example, the value of the root node is <code>66</code>.</p>
+<p><em>What is the value of the root node?</em></p>
+</div><h2 id='reexports' class='section-header'><a href="#reexports">Re-exports</a></h2>
+<table><tr><td><code>pub use crate::initial::<a class="struct" href="../day08/initial/struct.Day08Initial.html" title="struct day08::initial::Day08Initial">Day08Initial</a>;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="benchmark/index.html"
+                                  title='mod day08::benchmark'>benchmark</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="initial/index.html"
+                                  title='mod day08::initial'>initial</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table><h2 id='statics' class='section-header'><a href="#statics">Statics</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="static" href="static.PUZZLE_INPUT.html"
+                                  title='static day08::PUZZLE_INPUT'>PUZZLE_INPUT</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="trait" href="trait.AoC.html"
+                                  title='trait day08::AoC'>AoC</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../";window.currentCrate = "day08";</script><script src="../aliases.js"></script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `day09` crate."><meta name="keywords" content="rust, rustlang, rust-lang, day09"><title>day09 - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Crate day09</p><div class="sidebar-elems"><a id='all-types' href='all.html'><p>See all day09's items</p></a><div class="block items"><ul><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li><li><a href="#statics">Statics</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'day09', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/day09/lib.rs.html#1-235' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>day09</a></span></h1><div class='docblock'><h1 id="day-09" class="section-header"><a href="#day-09">Day 09:</a></h1>
+<p><a href="report/index.html">Benchmarking report</a>:</p>
+<ul>
+<li><a href="day09_part1/report/index.html">Part 1</a></li>
+<li><a href="day09_part2/report/index.html">Part 2</a></li>
+</ul>
+<h2 id="part-one" class="section-header"><a href="#part-one">Part One</a></h2>
+<p>You talk to the Elves while you wait for your navigation system to initialize. To
+pass the time, they introduce you to their favorite
+<a href="https://en.wikipedia.org/wiki/Marble_(toy)">marble</a> game.</p>
+<p>The Elves play this game by taking turns arranging the marbles in a <em>circle</em>
+according to very particular rules. The marbles are numbered starting with
+<code>0</code> and increasing by <code>1</code> until every marble has a number.</p>
+<p>First, the marble numbered <code>0</code> is placed in the circle. At this point, while it
+contains only a single marble, it is still a circle: the marble is both clockwise
+from itself and counter-clockwise from itself. This marble is designated the
+<em>current marble</em>.</p>
+<p>Then, each Elf takes a turn placing the <em>lowest-numbered remaining marble</em> into
+the circle between the marbles that are <code>1</code> and <code>2</code> marbles <em>clockwise</em> of the
+current marble. (When the circle is large enough, this means that there is one
+marble between the marble that was just placed and the current marble.) The
+marble that was just placed then becomes the <em>current marble</em>.</p>
+<p>However, if the marble that is about to be placed has a number which is a multiple
+of <code>23</code>, <em>something entirely different happens</em>. First, the current player keeps
+the marble they would have placed, adding it to their <em>score</em>. In addition, the
+marble <code>7</code> marbles <em>counter-clockwise</em> from the current marble is <em>removed</em> from
+the circle and <em>also</em> added to the current player's score. The marble located
+immediately <em>clockwise</em> of the marble that was removed becomes the new <em>current marble</em>.</p>
+<p>For example, suppose there are 9 players. After the marble with value <code>0</code> is
+placed in the middle, each player (shown in square brackets) takes a turn. The
+result of each of those turns would produce circles of marbles like this, where
+clockwise is to the right and the resulting current marble is in parentheses:</p>
+<pre><code class="language-text">[-] (0)
+[1]  0 (1)
+[2]  0 (2) 1
+[3]  0  2  1 (3)
+[4]  0 (4) 2  1  3
+[5]  0  4  2 (5) 1  3
+[6]  0  4  2  5  1 (6) 3
+[7]  0  4  2  5  1  6  3 (7)
+[8]  0 (8) 4  2  5  1  6  3  7
+[9]  0  8  4 (9) 2  5  1  6  3  7
+[1]  0  8  4  9  2(10) 5  1  6  3  7
+[2]  0  8  4  9  2 10  5(11) 1  6  3  7
+[3]  0  8  4  9  2 10  5 11  1(12) 6  3  7
+[4]  0  8  4  9  2 10  5 11  1 12  6(13) 3  7
+[5]  0  8  4  9  2 10  5 11  1 12  6 13  3(14) 7
+[6]  0  8  4  9  2 10  5 11  1 12  6 13  3 14  7(15)
+[7]  0(16) 8  4  9  2 10  5 11  1 12  6 13  3 14  7 15
+[8]  0 16  8(17) 4  9  2 10  5 11  1 12  6 13  3 14  7 15
+[9]  0 16  8 17  4(18) 9  2 10  5 11  1 12  6 13  3 14  7 15
+[1]  0 16  8 17  4 18  9(19) 2 10  5 11  1 12  6 13  3 14  7 15
+[2]  0 16  8 17  4 18  9 19  2(20)10  5 11  1 12  6 13  3 14  7 15
+[3]  0 16  8 17  4 18  9 19  2 20 10(21) 5 11  1 12  6 13  3 14  7 15
+[4]  0 16  8 17  4 18  9 19  2 20 10 21  5(22)11  1 12  6 13  3 14  7 15
+[5]  0 16  8 17  4 18(19) 2 20 10 21  5 22 11  1 12  6 13  3 14  7 15
+[6]  0 16  8 17  4 18 19  2(24)20 10 21  5 22 11  1 12  6 13  3 14  7 15
+[7]  0 16  8 17  4 18 19  2 24 20(25)10 21  5 22 11  1 12  6 13  3 14  7 15
+</code></pre>
+<p>The goal is to be the <em>player with the highest score</em> after the last marble is
+used up. Assuming the example above ends after the marble numbered <code>25</code>, the
+winning score is <code>23+9=_32_</code> (because player 5 kept marble <code>23</code> and removed
+marble <code>9</code>, while no other player got any points in this very short example
+game).</p>
+<p>Here are a few more examples:</p>
+<ul>
+<li><code>10</code> players; last marble is worth <code>1618</code> points: high score is <em><code>8317</code></em></li>
+<li><code>13</code> players; last marble is worth <code>7999</code> points: high score is <em><code>146373</code></em></li>
+<li><code>17</code> players; last marble is worth <code>1104</code> points: high score is <em><code>2764</code></em></li>
+<li><code>21</code> players; last marble is worth <code>6111</code> points: high score is <em><code>54718</code></em></li>
+<li><code>30</code> players; last marble is worth <code>5807</code> points: high score is <em><code>37305</code></em></li>
+</ul>
+<p><em>What is the winning Elf's score?</em></p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>Amused by the speed of your answer, the Elves are curious:</p>
+<p><em>What would the new winning Elf's score be if the number of the last
+marble were 100 times larger?</em></p>
+</div><h2 id='reexports' class='section-header'><a href="#reexports">Re-exports</a></h2>
+<table><tr><td><code>pub use crate::initial::<a class="struct" href="../day09/initial/struct.Day09Initial.html" title="struct day09::initial::Day09Initial">Day09Initial</a>;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="benchmark/index.html"
+                                  title='mod day09::benchmark'>benchmark</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="initial/index.html"
+                                  title='mod day09::initial'>initial</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.Input.html"
+                                  title='struct day09::Input'>Input</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table><h2 id='statics' class='section-header'><a href="#statics">Statics</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="static" href="static.PUZZLE_INPUT.html"
+                                  title='static day09::PUZZLE_INPUT'>PUZZLE_INPUT</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="trait" href="trait.AoC.html"
+                                  title='trait day09::AoC'>AoC</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="fn" href="fn.parse_input.html"
+                                  title='fn day09::parse_input'>parse_input</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../";window.currentCrate = "day09";</script><script src="../aliases.js"></script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

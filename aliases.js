@@ -1,0 +1,11 @@
+var ALIASES = {};
+ALIASES['day01'] = {};
+ALIASES['day02'] = {};
+ALIASES['day03'] = {};
+ALIASES['day04'] = {};
+ALIASES['day05'] = {};
+ALIASES['day06'] = {};
+ALIASES['day07'] = {};
+ALIASES['day08'] = {};
+ALIASES['day09'] = {};
+ALIASES['day12'] = {};

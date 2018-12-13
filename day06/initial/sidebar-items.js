@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Cell",""]],"fn":[["boundaries",""],["new_grid",""],["solution_part1",""],["solution_part2",""]],"struct":[["BoundingBox",""],["Day06Initial",""]],"type":[["CoordinateId",""],["Grid",""]]});
