@@ -1,0 +1,18 @@
+[package]
+name = "day12"
+version = "0.1.0"
+authors = ["Nicolas Bigaouette <nbigaouette@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+# log = "0.4"
+slice-deque = "0.1"
+
+[dev-dependencies]
+criterion = "0.2"
+env_logger = "0.6"
+pretty_assertions = "0.5"
+
+[[bench]]
+name = "aoc_benchmark"
+harness = false
